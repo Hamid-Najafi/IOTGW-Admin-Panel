@@ -68,12 +68,12 @@ class Sidebar extends Component {
             <div className="sidebar" data-color="black" data-image={image}>
                 <div className="sidebar-background" style={bgImage}></div>
                 <div className="logo">
-                    <a href="http://www.creative-tim.com" className="simple-text logo-mini">
+                    <a className="simple-text logo-mini">
                         <div className="logo-img">
                             <img src={logo} alt="react-logo" />
                         </div>
                     </a>
-                    <a href="http://www.creative-tim.com" className="simple-text logo-normal">
+                    <a className="simple-text logo-normal">
                         IOT GATEWAY
                 	</a>
                 </div>

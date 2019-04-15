@@ -13,6 +13,7 @@ import image from 'assets/img/full-screen-image-3.jpg';
 import avatar from 'assets/img/default-avatar.png';
 // logo for sidebar
 import logo from "logo.svg";
+import { userInfo } from 'variables/Variables.jsx';
 
 import dashRoutes from 'routes/dash.jsx';
 
@@ -85,7 +86,7 @@ class Sidebar extends Component {
                         <div className="info">
                             <a onClick={() => this.setState({ openAvatar: !this.state.openAvatar })}>
                                 <span>
-                                    Hamid Najafi
+                                    {userInfo.firstName + " " + userInfo.lastName}
                                     <b className={this.state.openAvatar ? "caret rotate-180" : "caret"}></b>
                                 </span>
                             </a>

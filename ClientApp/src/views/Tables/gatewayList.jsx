@@ -12,7 +12,7 @@ import {
     gateway_tdArray
 } from 'variables/Variables.jsx';
 import { Link } from 'react-router-dom';
-
+//test
 class gatewayList extends Component {
     render() {
         return (

@@ -8,8 +8,8 @@ import Card from 'components/Card/Card.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 import { Link } from 'react-router-dom';
 import {
-    thArray,
-    tdArray
+    devices_thArray,
+    devices_tdArray
 } from 'variables/Variables.jsx';
 // let gatewayId = 1;
 // let addPageUrl = gatewayId + '/add/';
@@ -30,7 +30,7 @@ class deviceList extends Component {
                                                 <th>#</th>
 
                                                 {
-                                                    thArray.map((prop, key) => {
+                                                    devices_thArray.map((prop, key) => {
                                                         return (
                                                             <th key={key}>{prop}</th>
                                                         );
@@ -41,7 +41,7 @@ class deviceList extends Component {
                                         </thead>
                                         <tbody>
                                             {
-                                                tdArray.map((prop, key) => {
+                                                devices_tdArray.map((prop, key) => {
                                                     return (
                                                         <tr key={key}>
                                                             <td>

@@ -70,6 +70,7 @@ import addGateway from '../views/Forms/addGateway.jsx';
 import addDevice from '../views/Forms/addDevice.jsx';
 import editDevice from '../views/Forms/editDevice.jsx';
 import UserPage from 'views/Pages/UserPage.jsx';
+import { gatewayListInfo } from 'variables/Variables.jsx';
 
 import LoginPage from 'views/Pages/LoginPage.jsx';
 import RegisterPage from 'views/Pages/RegisterPage.jsx';
@@ -78,8 +79,7 @@ var dashRoutes = [
     { collapse: true, path: "/gateway", name: "Gateways", state: "openComponents", icon: "pe-7s-plugin", views:[
         { path: "/gateway/all", name: "Gateways List", mini: "GL", component: gatewayList },
         { path: "/gateway/add", name: "Add Gateway", mini: "AG", component: addGateway },
-        { path: "/gateway/1", name: "Gateway1", mini: "G1", component: deviceList },
-        { path: "/gateway/2", name: "Gateway2", mini: "G2", component: deviceList }]
+        ]
     },
     { collapse: true, path: "/pages", name: "Pages", state: "openComponents2", icon: "pe-7s-plugin", views:[
         { path: "/device/add", name: "Add Device", icon: "pe-7s-plus", mini: "AD",component: addDevice },
@@ -90,6 +90,10 @@ var dashRoutes = [
     },
     // { path: "/icon", name: "icon", component: Icons, icon: "pe-7s-bell",},
    ];
-
+Object.keys(gatewayListInfo).forEach(function(key) {
+    console.log(gatewayListInfo[key].id)
+    dashRoutes[0].views.push({ path: "/gateway/" + gatewayListInfo[key].id, name: gatewayListInfo[key].name, mini: gatewayListInfo[key].mini, component: deviceList });
+})
+  
 export default dashRoutes;
 

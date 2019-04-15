@@ -6,10 +6,10 @@ import {
 import Card from 'components/Card/Card.jsx';
 import FormInputs from 'components/FormInputs/FormInputs.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
-
+import { userInfo } from 'variables/Variables.jsx';
 class UserPage extends Component {
     render() {
-        return (
+        return (            
             <div className="main-content">
                 <Grid fluid>
                     <Row>
@@ -26,7 +26,7 @@ class UserPage extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Company",
-                                                    defaultValue: "Ferdowsi University of Mashhad",
+                                                    defaultValue: userInfo.company,
                                                     disabled: false
                                                 },
                                                 {
@@ -34,14 +34,14 @@ class UserPage extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Username",
-                                                    defaultValue: "Hamid_najafi"
+                                                    defaultValue: userInfo.user_name
                                                 },
                                                 {
                                                     label: "Email address",
                                                     type: "email",
                                                     bsClass: "form-control",
                                                     placeholder: "Email",
-                                                    defaultValue: "Hamid_najafi@gmail.com"
+                                                    defaultValue: userInfo.email
                                                 }
                                             ]}
                                         />
@@ -53,21 +53,21 @@ class UserPage extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "First name",
-                                                    defaultValue: "Hamid"
+                                                    defaultValue: userInfo.firstName
                                                 },
                                                 {
                                                     label: "Last name",
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Last name",
-                                                    defaultValue: "Najafi"
+                                                    defaultValue: userInfo.lastName
                                                 },
                                                 {
                                                     label: "Adress",
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Home Adress",
-                                                    defaultValue: "Sajad Street, Bozorgmehr No. 4"
+                                                    defaultValue: userInfo.address
                                                 }
                                             ]}
                                         />
@@ -80,21 +80,21 @@ class UserPage extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "City",
-                                                    defaultValue: "Mashhad"
+                                                    defaultValue: userInfo.city
                                                 },
                                                 {
                                                     label: "Country",
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Country",
-                                                    defaultValue: "Iran"
+                                                    defaultValue: userInfo.country
                                                 },
                                                 {
                                                     label: "Postal Code",
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "ZIP Code",
-                                                    defaultValue: "12345"
+                                                    defaultValue: userInfo.zipCode
                                                 }
                                             ]}
                                         />

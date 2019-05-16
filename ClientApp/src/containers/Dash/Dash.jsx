@@ -6,7 +6,6 @@ import 'perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
 
 import Sidebar from 'components/Sidebar/Sidebar.jsx';
 
-
 class Dash extends Component{
     constructor(props){
         super(props);

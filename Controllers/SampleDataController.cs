@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ReactTemplate.Controllers
+namespace IOTGW_Admin_Panel.Controllers
 {
     [Route("api/[controller]")]
     public class SampleDataController : Controller

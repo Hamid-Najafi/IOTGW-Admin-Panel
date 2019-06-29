@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/ReactTemplate.csproj"
+                "${workspaceFolder}/IOTGW-Admin-Panel.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -17,7 +17,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/ReactTemplate.csproj"
+                "${workspaceFolder}/IOTGW-Admin-Panel.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -28,7 +28,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/ReactTemplate.csproj"
+                "${workspaceFolder}/IOTGW-Admin-Panel.csproj"
             ],
             "problemMatcher": "$tsc"
         }

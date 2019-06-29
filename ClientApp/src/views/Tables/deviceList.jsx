@@ -28,7 +28,6 @@ class deviceList extends Component {
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-
                                                 {
                                                     devices_thArray.map((prop, key) => {
                                                         return (

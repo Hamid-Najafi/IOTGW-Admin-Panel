@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     Grid, Row, Col,
-    FormGroup, ControlLabel, FormControl, HelpBlock, Form, InputGroup
+    FormGroup, ControlLabel, FormControl, Form
 } from 'react-bootstrap';
 
 import Card from 'components/Card/Card.jsx';

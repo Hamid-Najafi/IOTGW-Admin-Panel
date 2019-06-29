@@ -6,7 +6,6 @@ import {
 
 import Card from 'components/Card/Card.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
-import addGateway from 'views/Forms/addGateway.jsx';
 import {
     gateway_thArray,
     gateway_tdArray

@@ -7,7 +7,28 @@ import Card from 'components/Card/Card.jsx';
 import FormInputs from 'components/FormInputs/FormInputs.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 import { userInfo } from 'variables/Variables.jsx';
+
 class UserPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: []
+        };
+    }
+    
+    componentDidMount() {
+        fetch("https://jsonplaceholder.typicode.com/todos/1")
+          .then(res => res.json())
+          .then(
+            (result) => {
+              this.setState({
+                user: result
+              });
+              console.log(this.state.user)
+            },
+        )
+    }
+    
     render() {
         return (            
             <div className="main-content">
@@ -115,6 +136,7 @@ class UserPage extends Component {
 
                                         <div className="clearfix"></div>
                                     </form>
+                                    
                                 }
                             />
                         </Col>

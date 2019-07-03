@@ -16,8 +16,11 @@ namespace IOTGW_Admin_Panel.Models
         [StringLength(30)]
         public string Name { get; set; }
         [Required]
+        public string Config { get; set; }
+
         [StringLength(100)]
         public string Description { get; set; }
+        [Required]
         public NodeType Type { get; set; }
 
     }

@@ -11,7 +11,6 @@ namespace IOTGW_Admin_Panel.Models
     public class User
     {
         public int ID { get; set; }
-        public Roll Roll { get; set; }
         [Required]
         [Display(Name = "User Name")]
         [StringLength(20, MinimumLength = 4)]
@@ -23,6 +22,8 @@ namespace IOTGW_Admin_Panel.Models
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         public string Email { get; set; }
+        [Required]
+        public Roll Roll { get; set; }
         [StringLength(20, MinimumLength = 4)]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

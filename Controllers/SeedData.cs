@@ -26,7 +26,7 @@ namespace IOTGW_Admin_Panel.Models
                         LastName = "Momeni",
                     }
                 );
-                
+
                 await context.SaveChangesAsync();
             }
         }

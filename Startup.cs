@@ -45,7 +45,7 @@ namespace IOTGW_Admin_Panel
                     },
                     License = new OpenApiLicense
                     {
-                        Name = "Use under LICX License",
+                        Name = "Use under LICX",
                         //Url = new Uri("https://example.com/license"),
                     }
                 });

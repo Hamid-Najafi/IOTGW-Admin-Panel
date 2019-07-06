@@ -6,31 +6,90 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IOTGW_Admin_Panel.Models;
+using WebApi.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IOTGW_Admin_Panel.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
         private readonly DataBaseContext _context;
-        public UsersController(DataBaseContext context)
+        private IUserService _userService;
+
+        public UsersController(DataBaseContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
+
+
+            if (_context.Users.Any())
+            {
+                return;
+            }
+            _context.Users.AddRangeAsync(
+              new User
+              {
+                  Username = "vaziri.shahla24",
+                  Password = "1234",
+                  FirstName = "Shahla",
+                  LastName = "Vaziri",
+                  //FullName = "Shahla Vaziri",
+                  Email = "vaziri.shahla24@gmail.com",
+                  Address = "Ferdowsi Campus",
+                  City = "Mashhad",
+                  EnrollmentDate = DateTime.Now,
+                  Roll = Roll.Admin
+              },
+              new User
+              {
+                  Username = "Hamid.najafi",
+                  Password = "1234",
+                  FirstName = "Hamid",
+                  LastName = "Najafi",
+                  //FullName = "Hamid Najafi",
+                  Email = "Hamid.Najafi@email.com",
+                  Address = "Ferdowsi Campus",
+                  City = "Mashhad",
+                  EnrollmentDate = DateTime.Now,
+                  Roll = Roll.Admin
+
+              }
+          );
+            _context.SaveChangesAsync();
+
+        }
+        /// <summary>
+        /// authenticate and generate JSON Web Token (JWT) 
+        /// </summary>
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody]User userParam)
+        {
+            var user = _userService.Authenticate(userParam.Username, userParam.Password);
+
+            if (user == null)
+
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            return Ok(user);
         }
 
         /// <summary>
         /// gets Users list.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public ActionResult<IEnumerable<User>> GetUsers() //ASYNC
         {
-            return await _context.Users.ToListAsync();
+            var users = _userService.GetAll();
+            return Ok(users);
         }
         /// <summary>
         /// gets a specific User.
         /// </summary>
-        /// <param id="ID"></param> 
+        /// <param id="Id"></param> 
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -52,7 +111,7 @@ namespace IOTGW_Admin_Panel.Controllers
         {
             _context.Add(user);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetUser), new { id = user.ID }, user);
+            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
         /// <summary>
         /// Update a specific User.
@@ -62,7 +121,7 @@ namespace IOTGW_Admin_Panel.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
-            if (id != user.ID)
+            if (id != user.Id)
             {
                 return BadRequest();
             }

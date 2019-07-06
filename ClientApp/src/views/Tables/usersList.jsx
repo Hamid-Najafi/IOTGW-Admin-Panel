@@ -21,11 +21,8 @@ class usersList extends Component {
 
     componentWillMount() {
 
-        let token  = reactLocalStorage.getObject('userData').token
-        var temp = {
-            "token": token
-        }
-        console.log(token)
+        let token  = reactLocalStorage.getObject('userInfo').token
+        
 
         fetch("https://localhost:5001/api/Users?token="+ token , {
             method: 'GET',
@@ -42,6 +39,7 @@ class usersList extends Component {
                     this.setState({
                         users: result
                     });
+
 
                 },
             )

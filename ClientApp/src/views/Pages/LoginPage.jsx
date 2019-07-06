@@ -90,19 +90,6 @@ class LoginPage extends Component {
                                             </Col>
                                         </Row>
 
-                                        <Row>
-
-                                            <Col md={12} >
-
-                                                <div className="margin-top-10">
-                                                    <Button bsStyle="default" wd >
-                                                        Create Account
-
-                                            </Button>
-                                                </div>
-
-                                            </Col>
-                                        </Row>
                                     </div>
                                 }
                                 ftTextCenter

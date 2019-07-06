@@ -133,15 +133,15 @@ namespace IOTGW_Admin_Panel.Services
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-            //user.Password = null;
+            user.Password = null;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            //user.PasswordHash = null;
-            //user.PasswordSalt = null;
+            user.PasswordHash = null;
+            user.PasswordSalt = null;
 
             return user;
         }

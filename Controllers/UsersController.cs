@@ -23,6 +23,8 @@ namespace IOTGW_Admin_Panel.Controllers
         {
             _context = context;
             _userService = userService;
+            _mapper = mapper;
+
         }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace IOTGW_Admin_Panel.Controllers
         /// </summary>
         [HttpGet]
         [Authorize(Roles = Role.Admin)]
-        public ActionResult<IEnumerable<User>> GetUsers() //ASYNC
+        public ActionResult<IEnumerable<User>> GetAll() //ASYNC
         {
             var users = _userService.GetAll();
             return Ok(users);
@@ -57,9 +59,10 @@ namespace IOTGW_Admin_Panel.Controllers
         /// </summary>
         /// <param id="Id"></param> 
         [HttpGet("{id}")]
-        public ActionResult<User> GetUser(int id)
+        public ActionResult<User> GetById(int id)
         {
             var user = _userService.GetById(id);
+            //var userDto = _mapper.Map<User>(user);
 
             if (user == null)
             {

@@ -5,7 +5,6 @@ import 'perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
 // react component that creates notifications (like some alerts with messages)
 
 import Sidebar from 'components/Sidebar/Sidebar.jsx';
-import * as Ps from 'perfect-scrollbar';
 import 'perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
 // react component that creates notifications (like some alerts with messages)
 import NotificationSystem from 'react-notification-system';
@@ -25,16 +24,6 @@ import {
 } from 'react-router-dom';
 
 class Dash extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            mockData:[]
-        };
-    }
-    componentDidMount(){
-        
-    
-    }
     
     render(){
         return (

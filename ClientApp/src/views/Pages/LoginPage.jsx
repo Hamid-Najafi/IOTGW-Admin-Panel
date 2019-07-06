@@ -23,7 +23,7 @@ class LoginPage extends Component{
             <Grid>
                 <Row>
                     <Col md={4} sm={6} mdOffset={4} smOffset={3}>
-                        <form>
+                        <form action="" method="POST">
                             <Card
                                 hidden={this.state.cardHidden}
                                 textCenter
@@ -55,7 +55,7 @@ class LoginPage extends Component{
                                     <div>
                                         <Row>
                                         <Col md={12}>
-                                            <Button bsStyle="info" fill wd>
+                                            <Button bsStyle="info" type="submit" fill wd>
                                                 Login
                                             </Button>
                                         </Col>

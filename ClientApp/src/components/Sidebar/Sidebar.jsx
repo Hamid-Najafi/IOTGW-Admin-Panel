@@ -93,7 +93,7 @@ class Sidebar extends Component {
                             <Collapse in={this.state.openAvatar}>
                                 <ul className="nav">
 
-                                    <Link to='/user/edit'>
+                                    <Link to='/users/edit'>
                                         <li>
                                             <a>
                                                 <span className="sidebar-mini"></span>

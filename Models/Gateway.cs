@@ -6,7 +6,7 @@ namespace IOTGW_Admin_Panel.Models
 
     public class Gateway
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         [Required]
         [StringLength(30)]
         public string Name { get; set; }

@@ -6,7 +6,6 @@ import {
 import Card from 'components/Card/Card.jsx';
 import FormInputs from 'components/FormInputs/FormInputs.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
-import { userInfo } from 'variables/Variables.jsx';
 
 class UserPage extends Component {
     constructor(props) {
@@ -17,7 +16,7 @@ class UserPage extends Component {
     }
     
     componentDidMount() {
-        fetch("https://jsonplaceholder.typicode.com/todos/1")
+        fetch("https://localhost:5001/api/Users/1")
           .then(res => res.json())
           .then(
             (result) => {
@@ -28,6 +27,7 @@ class UserPage extends Component {
             },
         )
     }
+   
     
     render() {
         return (            
@@ -46,23 +46,20 @@ class UserPage extends Component {
                                                     label: "Company Name",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "Company",
-                                                    defaultValue: userInfo.company,
+                                                    placeholder: this.state.user.companyName,
                                                     disabled: false
                                                 },
                                                 {
                                                     label: "Username",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "Username",
-                                                    defaultValue: userInfo.user_name
+                                                    placeholder: this.state.user.username,
                                                 },
                                                 {
                                                     label: "Email address",
                                                     type: "email",
                                                     bsClass: "form-control",
-                                                    placeholder: "Email",
-                                                    defaultValue: userInfo.email
+                                                    placeholder:  this.state.user.email,
                                                 }
                                             ]}
                                         />
@@ -73,22 +70,20 @@ class UserPage extends Component {
                                                     label: "First name",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "First name",
-                                                    defaultValue: userInfo.firstName
+                                                    placeholder: this.state.user.firstName,
                                                 },
                                                 {
                                                     label: "Last name",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "Last name",
-                                                    defaultValue: userInfo.lastName
+                                                    placeholder: this.state.user.lastName
+
                                                 },
                                                 {
                                                     label: "Adress",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "Home Adress",
-                                                    defaultValue: userInfo.address
+                                                    placeholder: this.state.user.address,
                                                 }
                                             ]}
                                         />
@@ -100,22 +95,19 @@ class UserPage extends Component {
                                                     label: "City",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "City",
-                                                    defaultValue: userInfo.city
+                                                    placeholder: this.state.user.city,
                                                 },
                                                 {
                                                     label: "Country",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "Country",
-                                                    defaultValue: userInfo.country
+                                                    placeholder: this.state.user.country,
                                                 },
                                                 {
                                                     label: "Postal Code",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "ZIP Code",
-                                                    defaultValue: userInfo.zipCode
+                                                    placeholder: this.state.user.postalCode,
                                                 }
                                             ]}
                                         />

@@ -50,6 +50,13 @@ const gateway_tdArray = [
     ["Gateway2", "Description text"]
 ];
 
+// gateway lists
+const users_thArray = ["username", "email"];
+const users_tdArray = [
+    ["Sadjad Momeni", "1", "sajad@gmail.com"],
+    ["Hamid Najafi", "2" , "hamid@gmail.com"]
+];
+
 
 //
 // //
@@ -265,6 +272,7 @@ const iconsArray = [
 module.exports = {
     devices_thArray, devices_tdArray, // For tables (TableList view)
     gateway_thArray, gateway_tdArray,
+    users_thArray, users_tdArray,
     iconsArray, // For icons (Icons view)
     userInfo,gatewayListInfo // For charts (Dashboard view)
 };

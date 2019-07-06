@@ -16,11 +16,11 @@ class Pages extends Component{
     getPageClass(){
         var pageClass = "";
         switch (this.props.location.pathname) {
-            case "/pages/login-page":
-                pageClass = " login-page";
+            case "/login":
+                pageClass = " login";
                 break;
-            case "/pages/register-page":
-                pageClass = " register-page";
+            case "/register":
+                pageClass = " register";
                 break;
             default:
                 pageClass = "";

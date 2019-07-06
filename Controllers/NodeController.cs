@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 namespace IOTGW_Admin_Panel.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/gateway/[controller]")]
     public class NodeController : ControllerBase
     {
         private readonly DataBaseContext _context;

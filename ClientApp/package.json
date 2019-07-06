@@ -10,7 +10,7 @@
         "datatables.net-responsive": "^2.2.0",
         "google-maps-react": "^1.1.0",
         "history": "^4.7.2",
-        "jquery": "^3.2.1",
+        "jquery": "^3.4.1",
         "moment": "^2.18.1",
         "node-sass-chokidar": "0.0.3",
         "nouislider": "^10.1.0",
@@ -25,6 +25,7 @@
         "react-datetime": "^2.10.2",
         "react-dom": "^15.6.1",
         "react-notification-system": "^0.2.15",
+        "react-redux": "^5.0.5",
         "react-router-dom": "^4.1.2",
         "react-scripts": "1.0.10",
         "react-select": "^1.0.0-rc.10",
@@ -32,6 +33,10 @@
         "react-stepzilla": "^4.6.3",
         "react-syntax-highlighter": "^5.7.0",
         "react-tagsinput": "^3.18.0",
+        "reactjs-localstorage": "0.0.7",
+        "redux": "^3.7.2",
+        "redux-logger": "^3.0.6",
+        "redux-thunk": "^2.2.0",
         "wnumb": "^1.1.0"
     },
     "scripts": {

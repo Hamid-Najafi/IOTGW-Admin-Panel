@@ -3,31 +3,46 @@ import {
     Table,
     Grid, Row, Col
 } from 'react-bootstrap';
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 import Card from 'components/Card/Card.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 import {
-    users_thArray,
-    users_tdArray
-} from 'variables/Variables.jsx';
+    users_thArray} from 'variables/Variables.jsx';
 import { Link } from 'react-router-dom';
 
 class usersList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            users: [{ id: 1, username: "ss" }]
+            users:[]
         };
     }
 
     componentWillMount() {
-        fetch("https://localhost:5001/api/Users")
+
+        let token  = reactLocalStorage.getObject('userData').token
+        var temp = {
+            "token": token
+        }
+        console.log(token)
+
+        fetch("https://localhost:5001/api/Users?token="+ token , {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
+            },
+            // body: JSON.stringify(temp)
+        })
             .then(res => res.json())
             .then(
                 (result) => {
                     this.setState({
                         users: result
                     });
+
                 },
             )
     }
@@ -35,7 +50,7 @@ class usersList extends Component {
     renderTableData() {
         return this.state.users.map((user, index) => {
             const { id, username, email } = user //destructuring
-            var s = "" + id
+            var s = id
             return (
                 <tr key={id}>
                     <td>{id}</td>

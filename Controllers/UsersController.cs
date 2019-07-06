@@ -66,7 +66,8 @@ namespace IOTGW_Admin_Panel.Controllers
         /// </summary>
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]User userParam)
+        //public IActionResult Authenticate([FromBody]User userParam)
+        public IActionResult Authenticate(User userParam)
         {
             var user = _userService.Authenticate(userParam.Username, userParam.Password);
 

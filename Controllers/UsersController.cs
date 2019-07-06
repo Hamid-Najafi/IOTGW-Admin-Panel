@@ -55,9 +55,11 @@ namespace IOTGW_Admin_Panel.Controllers
         [Authorize(Roles = Role.Admin)]
         public ActionResult<IEnumerable<User>> GetAll()
         {
+
             try
             {
                 var users = _userService.GetAll();
+                //var usersMap = _mapper.Map<IList<User>>(users);
                 return Ok(users);
             }
             catch (AppException ex)
@@ -74,7 +76,7 @@ namespace IOTGW_Admin_Panel.Controllers
         [HttpGet("{id}")]
         public ActionResult<User> GetById(int id)
         {
-            //var userDto = _mapper.Map<User>(user);
+            //var userMap = _mapper.Map<User>(user);
 
             // only allow admins to access other user records
             var currentUserId = int.Parse(User.Identity.Name);
@@ -104,10 +106,6 @@ namespace IOTGW_Admin_Panel.Controllers
         {
             // map dto to entity
             //var user = _mapper.Map<User>(userParam);
-            // _context.Add(userParam);
-            // _context.SaveChangesAsync();
-            // return CreatedAtAction(nameof(GetById), new { id = userParam.Id }, userParam);
-
             try
             {
                 // save 
@@ -131,34 +129,27 @@ namespace IOTGW_Admin_Panel.Controllers
         public IActionResult Update(int id, User userParam)
         {
 
-            _context.Entry(userParam).State = EntityState.Modified;
-            _context.SaveChangesAsync();
+            //only allow admins to access other user records
+            var currentUserId = int.Parse(User.Identity.Name);
+            if (id != currentUserId && !User.IsInRole(Role.Admin))
+                return Forbid();
 
-            return NoContent();
-
-            // only allow admins to access other user records
-            // var currentUserId = int.Parse(User.Identity.Name);
-            // if (id != currentUserId && !User.IsInRole(Role.Admin))
-            // {
-            //     return Forbid();
-            // }
-
-            // // map dto to entity and set id
-            // var user = _mapper.Map<User>(userParam);
+            // map dto to entity and set id
+            // var userMap = _mapper.Map<User>(userParam);
             // user.Id = id;
 
-            // try
-            // {
-            //     // save 
-            //     _userService.Update(user, userParam.Password);
-            //     return NoContent();
-            //     //return Ok();
-            // }
-            // catch (AppException ex)
-            // {
-            //     // return error message if there was an exception
-            //     return BadRequest(ex.Message);
-            // }
+            try
+            {
+                // save 
+                _userService.Update(userParam, userParam.Password);
+                return NoContent();
+                //return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(ex.Message);
+            }
 
         }
 

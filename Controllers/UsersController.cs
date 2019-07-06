@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using IOTGW_Admin_Panel.Models;
 using WebApi.Services;
 using Microsoft.AspNetCore.Authorization;
+using IOTGW_Admin_Panel.Helpers;
+using AutoMapper;
 
 namespace IOTGW_Admin_Panel.Controllers
 {
@@ -15,8 +17,9 @@ namespace IOTGW_Admin_Panel.Controllers
     {
         private readonly DataBaseContext _context;
         private IUserService _userService;
+        private IMapper _mapper;
 
-        public UsersController(DataBaseContext context, IUserService userService)
+        public UsersController(DataBaseContext context, IUserService userService, IMapper mapper)
         {
             _context = context;
             _userService = userService;
@@ -78,13 +81,27 @@ namespace IOTGW_Admin_Panel.Controllers
         /// Ctreate new User.
         /// </summary>
         /// <param user="User Item"></param> 
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        [Authorize(Roles = Role.Admin)]
+        [HttpPost("register")]
+        public IActionResult Register(User userParam)
         {
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            // map dto to entity
+            var user = _mapper.Map<User>(userParam);
+
+            try
+            {
+                // save 
+                _userService.Create(user, userParam.Password);
+                return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+                //return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(ex.Message);
+            }
         }
+
 
         /// <summary>
         /// Update a specific User.
@@ -92,17 +109,37 @@ namespace IOTGW_Admin_Panel.Controllers
         /// <param name="id"></param>   
         /// <param user="User Item"></param>   
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public IActionResult Update(int id, User userParam)
         {
-            if (id != user.Id)
+            if (id != userParam.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            // only allow admins to access other user records
+            var currentUserId = int.Parse(User.Identity.Name);
+            if (id != currentUserId && !User.IsInRole(Role.Admin))
+            {
+                return Forbid();
+            }
 
-            return NoContent();
+            // map dto to entity and set id
+            var user = _mapper.Map<User>(userParam);
+            user.Id = id;
+
+            try
+            {
+                // save 
+                _userService.Update(user, userParam.Password);
+                return NoContent();
+                //return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -110,19 +147,26 @@ namespace IOTGW_Admin_Panel.Controllers
         /// </summary>
         /// <param name="id"></param>   
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        [Authorize(Roles = Role.Admin)]
+        public IActionResult DeleteUser(int id)
         {
-            var User = await _context.Users.FindAsync(id);
-
-            if (User == null)
+            // only allow admins to access other user records
+            var currentUserId = int.Parse(User.Identity.Name);
+            if (id != currentUserId && !User.IsInRole(Role.Admin))
             {
+                return Forbid();
+            }
+            try
+            {
+                _userService.Delete(id);
+                return NoContent();
+                //return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
                 return NotFound();
             }
-
-            _context.Users.Remove(User);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
     }
 }

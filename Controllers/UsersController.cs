@@ -94,7 +94,7 @@ namespace IOTGW_Admin_Panel.Controllers
             {
                 // save 
                 _userService.Create(user, userParam.Password);
-                return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+                return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
                 //return Ok();
             }
             catch (AppException ex)

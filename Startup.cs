@@ -11,7 +11,7 @@ using IOTGW_Admin_Panel.Helpers;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using WebApi.Services;
+using IOTGW_Admin_Panel.Services;
 using AutoMapper;
 
 namespace IOTGW_Admin_Panel

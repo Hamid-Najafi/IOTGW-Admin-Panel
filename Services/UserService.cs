@@ -11,14 +11,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace WebApi.Services
+namespace IOTGW_Admin_Panel.Services
 {
     public interface IUserService
     {
         Task<User> Authenticate(string username, string password);
-        Task<User> AuthenticatePass(string username, string password);
-
-        IEnumerable<User> GetAll(); //Task
+        Task<IEnumerable<User>> GetAll(); //Task
         Task<User> GetById(int id);
         Task<User> Create(User user, string password);
         void Update(User user, string password = null);
@@ -39,11 +37,21 @@ namespace WebApi.Services
 
         public async Task<User> Authenticate(string username, string password)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username && x.Password == password);
+            if (string.IsNullOrEmpty(username))
+                throw new AppException("Username is required");
 
-            // return null if user not found
+            if (string.IsNullOrEmpty(password))
+                throw new AppException("Password is required");
+
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
+
+            // check if username exists
             if (user == null)
-                return null;
+                throw new AppException("User not found");
+
+            // check if password is correct
+            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+                throw new AppException("Password is Wrong");
 
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -65,36 +73,23 @@ namespace WebApi.Services
             await _context.SaveChangesAsync();
 
             // remove password before returning
-            user.Password = null;
+            user.PasswordHash = null;
+            user.PasswordSalt = null;
 
             return user;
         }
-        public async Task<User> AuthenticatePass(string username, string password)
+
+        public async Task<IEnumerable<User>> GetAll()
         {
-            // if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            //     return null;
+            if (!await _context.Users.AnyAsync())
+                throw new AppException("No User");
 
-            // var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
-
-            // // check if username exists
-            // if (user == null)
-            //     return null;
-
-            // // check if password is correct
-            // if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-            //     return null;
-
-            // // authentication successful
-            // return user;
-            return null;
-        }
-        public IEnumerable<User> GetAll() //async
-        {
-            return _context.Users.AsEnumerable().Select(record => new User()
+            return _context.Users.AsEnumerable().Select(record => new User() //ASYNC
             {
                 Id = record.Id,
                 Username = record.Username,
-                Password = null,
+                PasswordHash = null,
+                PasswordSalt = null,
                 Token = null,
                 Email = record.Email,
                 Role = record.Role,
@@ -113,10 +108,12 @@ namespace WebApi.Services
         {
             var user = await _context.Users.FindAsync(id);
             //var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            if (user == null)
+                throw new AppException("User not found");
 
-            // return user without password
-            if (user != null)
-                user.Password = null;
+            // return user without passwords credentials
+            user.PasswordHash = null;
+            user.PasswordSalt = null;
 
             return user;
         }
@@ -132,11 +129,11 @@ namespace WebApi.Services
             if (await _context.Users.AnyAsync(x => x.Email == user.Email))
                 throw new AppException("Email '" + user.Email + "' is already taken");
 
-            // byte[] passwordHash, passwordSalt;
-            // CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-            // user.PasswordHash = passwordHash;
-            // user.PasswordSalt = passwordSalt;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -167,9 +164,9 @@ namespace WebApi.Services
             await _context.SaveChangesAsync();
 
             // update user properties
-            // user.FirstName = userParam.FirstName;
-            // user.LastName = userParam.LastName;
-            // user.Username = userParam.Username;
+            user.FirstName = userParam.FirstName;
+            user.LastName = userParam.LastName;
+            user.Username = userParam.Username;
 
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(password))
@@ -177,8 +174,8 @@ namespace WebApi.Services
                 byte[] passwordHash, passwordSalt;
                 CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-                // user.PasswordHash = passwordHash;
-                // user.PasswordSalt = passwordSalt;
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
             }
 
             _context.Users.Update(user);
@@ -199,7 +196,6 @@ namespace WebApi.Services
         }
 
         // private helper methods
-
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (password == null) throw new ArgumentNullException("password");

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IOTGW_Admin_Panel.Models;
-using WebApi.Services;
+using IOTGW_Admin_Panel.Services;
 using Microsoft.AspNetCore.Authorization;
 using IOTGW_Admin_Panel.Helpers;
 using AutoMapper;
@@ -35,12 +35,16 @@ namespace IOTGW_Admin_Panel.Controllers
         //public IActionResult Authenticate([FromBody]User userParam)
         public IActionResult Authenticate(User userParam)
         {
-            var user = _userService.Authenticate(userParam.Username, userParam.Password);
-
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(user);
+            try
+            {
+                var user = _userService.Authenticate(userParam.Username, userParam.Password);
+                return Ok(user);
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
@@ -48,10 +52,18 @@ namespace IOTGW_Admin_Panel.Controllers
         /// </summary>
         [HttpGet]
         [Authorize(Roles = Role.Admin)]
-        public ActionResult<IEnumerable<User>> GetAll() //ASYNC
+        public ActionResult<IEnumerable<User>> GetAll()
         {
-            var users = _userService.GetAll();
-            return Ok(users);
+            try
+            {
+                var users = _userService.GetAll();
+                return Ok(users);
+            }
+            catch (AppException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -61,22 +73,23 @@ namespace IOTGW_Admin_Panel.Controllers
         [HttpGet("{id}")]
         public ActionResult<User> GetById(int id)
         {
-            var user = _userService.GetById(id);
             //var userDto = _mapper.Map<User>(user);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
 
             // only allow admins to access other user records
             var currentUserId = int.Parse(User.Identity.Name);
             if (id != currentUserId && !User.IsInRole(Role.Admin))
-            {
                 return Forbid();
+
+            try
+            {
+                var user = _userService.GetById(id);
+                return Ok(user);
+            }
+            catch (AppException ex)
+            {
+                return NotFound(ex.Message);
             }
 
-            return Ok(user);
         }
 
         /// <summary>

@@ -9,6 +9,9 @@ namespace IOTGW_Admin_Panel.Models
     {
         public async static void Initialize(IServiceProvider serviceProvider)
         {
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash("1234", out passwordHash, out passwordSalt);
+
             using (var _context = new DataBaseContext(
                 serviceProvider.GetRequiredService<
                 DbContextOptions<DataBaseContext>>()))
@@ -21,7 +24,8 @@ namespace IOTGW_Admin_Panel.Models
                 new User
                 {
                     Username = "Hamid",
-                    Password = "1234",
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
                     FirstName = "Hamid",
                     LastName = "Najafi",
                     //FullName = "Hamid Najafi",
@@ -34,7 +38,8 @@ namespace IOTGW_Admin_Panel.Models
                 new User
                 {
                     Username = "Shahla",
-                    Password = "1234",
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
                     FirstName = "Shahla",
                     LastName = "Vaziri",
                     //FullName = "Shahla Vaziri",
@@ -46,6 +51,17 @@ namespace IOTGW_Admin_Panel.Models
                 }
               );
                 await _context.SaveChangesAsync();
+            }
+        }
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
     }

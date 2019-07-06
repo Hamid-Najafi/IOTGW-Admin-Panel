@@ -13,7 +13,7 @@ namespace IOTGW_Admin_Panel.Models
         [StringLength(30, MinimumLength = 4)]
         public string Username { get; set; }
 
-        [Required]
+        //[Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         // public byte[] PasswordHash { get; set; }

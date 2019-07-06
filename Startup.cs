@@ -12,6 +12,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Services;
+using AutoMapper;
 
 namespace IOTGW_Admin_Panel
 {
@@ -30,6 +31,8 @@ namespace IOTGW_Admin_Panel
             services.AddCors();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContext<DataBaseContext>(options =>
             //      options.UseSqlite(Configuration.GetConnectionString("DataBaseContext")));

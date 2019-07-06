@@ -36,7 +36,6 @@ namespace IOTGW_Admin_Panel.Controllers
             var user = _userService.Authenticate(userParam.Username, userParam.Password);
 
             if (user == null)
-
                 return BadRequest(new { message = "Username or password is incorrect" });
 
             return Ok(user);

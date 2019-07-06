@@ -70,16 +70,6 @@ namespace WebApi.Services
 
         public IEnumerable<User> GetAll()
         {
-            // return (
-            //     new User
-            //     {
-            //         Username = "vaziri.shahla24",
-            //         Password = "2475",
-            //         Email = "vaziri.shahla24@gmail.com",
-            //         Roll = Roll.Admin
-            //     }
-            // );
-
             return _context.Users.AsEnumerable().Select(record => new User()
             {
                 Id = record.Id,
@@ -99,6 +89,5 @@ namespace WebApi.Services
                 Gateways = record.Gateways
             });
         }
-
     }
 }

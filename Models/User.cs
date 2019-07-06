@@ -4,10 +4,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IOTGW_Admin_Panel.Models
 {
-    public enum Roll
-    {
-        User, Admin
-    }
     public class User
     {
         public int Id { get; set; }
@@ -26,8 +22,8 @@ namespace IOTGW_Admin_Panel.Models
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
-        public Roll Roll { get; set; }
+        //[Required]
+        public string Role { get; set; }
 
         [StringLength(20, MinimumLength = 4)]
         [Display(Name = "First Name")]

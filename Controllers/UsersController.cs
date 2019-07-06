@@ -21,6 +21,7 @@ namespace IOTGW_Admin_Panel.Controllers
             _context = context;
             _userService = userService;
         }
+
         /// <summary>
         /// authenticate and generate JSON Web Token (JWT) 
         /// </summary>
@@ -42,27 +43,37 @@ namespace IOTGW_Admin_Panel.Controllers
         /// gets Users list.
         /// </summary>
         [HttpGet]
+        [Authorize(Roles = Role.Admin)]
         public ActionResult<IEnumerable<User>> GetUsers() //ASYNC
         {
             var users = _userService.GetAll();
             return Ok(users);
         }
+
         /// <summary>
         /// gets a specific User.
         /// </summary>
         /// <param id="Id"></param> 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public ActionResult<User> GetUser(int id)
         {
-            var User = await _context.Users.FindAsync(id);
+            var user = _userService.GetById(id);
 
-            if (User == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return User;
+            // only allow admins to access other user records
+            var currentUserId = int.Parse(User.Identity.Name);
+            if (id != currentUserId && !User.IsInRole(Role.Admin))
+            {
+                return Forbid();
+            }
+
+            return Ok(user);
         }
+
         /// <summary>
         /// Ctreate new User.
         /// </summary>
@@ -74,6 +85,7 @@ namespace IOTGW_Admin_Panel.Controllers
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
+
         /// <summary>
         /// Update a specific User.
         /// </summary>
@@ -92,6 +104,7 @@ namespace IOTGW_Admin_Panel.Controllers
 
             return NoContent();
         }
+
         /// <summary>
         /// Deletes a specific User.
         /// </summary>

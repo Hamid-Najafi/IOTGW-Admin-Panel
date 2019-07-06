@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using IOTGW_Admin_Panel.Helpers;
 using IOTGW_Admin_Panel.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,18 +15,14 @@ namespace WebApi.Services
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);
-        IEnumerable<User> GetAll();
+        Task<User> Authenticate(string username, string password);
+        IEnumerable<User> GetAll(); //Task
+        Task<User> GetById(int id);
+
     }
 
     public class UserService : IUserService
     {
-
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        // private List<User> _users = new List<User>
-        // {
-        //     new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
-        // };
 
         private readonly AppSettings _appSettings;
         private readonly DataBaseContext _context;
@@ -36,9 +33,9 @@ namespace WebApi.Services
             _context = context;
         }
 
-        public User Authenticate(string username, string password)
+        public async Task<User> Authenticate(string username, string password)
         {
-            var user = _context.Users.SingleOrDefault(x => x.Username == username && x.Password == password);
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username && x.Password == password);
 
             // return null if user not found
             if (user == null)
@@ -51,7 +48,8 @@ namespace WebApi.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -60,7 +58,7 @@ namespace WebApi.Services
             user.Token = tokenHandler.WriteToken(token);
 
             _context.Entry(user).State = EntityState.Modified;
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             // remove password before returning
             user.Password = null;
@@ -68,7 +66,7 @@ namespace WebApi.Services
             return user;
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<User> GetAll() //async
         {
             return _context.Users.AsEnumerable().Select(record => new User()
             {
@@ -77,7 +75,7 @@ namespace WebApi.Services
                 Password = null,
                 Token = null,
                 Email = record.Email,
-                Roll = record.Roll,
+                Role = record.Role,
                 FirstName = record.FirstName,
                 LastName = record.LastName,
                 EnrollmentDate = record.EnrollmentDate,
@@ -88,6 +86,17 @@ namespace WebApi.Services
                 CompanyName = record.CompanyName,
                 Gateways = record.Gateways
             });
+        }
+        public async Task<User> GetById(int id)
+        {
+            // var User = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+            // return user without password
+            if (user != null)
+                user.Password = null;
+
+            return user;
         }
     }
 }

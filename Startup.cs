@@ -63,9 +63,8 @@ namespace IOTGW_Admin_Panel
                 });
             });
 
-            // configure strongly x settings objects
+            // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
-
             services.Configure<AppSettings>(appSettingsSection);
 
             // configure jwt authentication
@@ -85,7 +84,7 @@ namespace IOTGW_Admin_Panel
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false,
+                    ValidateAudience = false
                 };
             });
 
@@ -140,15 +139,15 @@ namespace IOTGW_Admin_Panel
             });
             // App.Use(context)
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            // app.UseSpa(spa =>
+            // {
+            //     spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+            //     if (env.IsDevelopment())
+            //     {
+            //         spa.UseReactDevelopmentServer(npmScript: "start");
+            //     }
+            // });
         }
     }
 }

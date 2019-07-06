@@ -15,10 +15,11 @@ namespace IOTGW_Admin_Panel.Services
 {
     public interface IUserService
     {
-        Task<User> Authenticate(string username, string password);
-        Task<IEnumerable<User>> GetAll(); //Task
-        Task<User> GetById(int id);
-        Task<User> Create(User user, string password);
+        // Dont use Task<> Cause cant catch : throw new AppException
+        User Authenticate(string username, string password);
+        IEnumerable<User> GetAll();
+        User GetById(int id);
+        User Create(User user, string password);
         void Update(User user, string password = null);
         void Delete(int id);
     }
@@ -35,7 +36,7 @@ namespace IOTGW_Admin_Panel.Services
             _context = context;
         }
 
-        public async Task<User> Authenticate(string username, string password)
+        public User Authenticate(string username, string password)
         {
             if (string.IsNullOrEmpty(username))
                 throw new AppException("Username is required");
@@ -43,7 +44,7 @@ namespace IOTGW_Admin_Panel.Services
             if (string.IsNullOrEmpty(password))
                 throw new AppException("Password is required");
 
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
+            var user = _context.Users.SingleOrDefault(x => x.Username == username);
 
             // check if username exists
             if (user == null)
@@ -70,7 +71,7 @@ namespace IOTGW_Admin_Panel.Services
             user.Token = tokenHandler.WriteToken(token);
 
             _context.Entry(user).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             // remove password before returning
             user.PasswordHash = null;
@@ -79,12 +80,12 @@ namespace IOTGW_Admin_Panel.Services
             return user;
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public IEnumerable<User> GetAll()
         {
-            if (!await _context.Users.AnyAsync())
+            if (!_context.Users.Any())
                 throw new AppException("No User");
 
-            return _context.Users.AsEnumerable().Select(record => new User() //ASYNC
+            return _context.Users.AsEnumerable().Select(record => new User()
             {
                 Id = record.Id,
                 Username = record.Username,
@@ -104,10 +105,10 @@ namespace IOTGW_Admin_Panel.Services
                 Gateways = record.Gateways
             });
         }
-        public async Task<User> GetById(int id)
+        public User GetById(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            //var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var user = _context.Users.Find(id);
+            //var user = _context.Users.FirstOrDefault(x => x.Id == id);
             if (user == null)
                 throw new AppException("User not found");
 
@@ -117,32 +118,36 @@ namespace IOTGW_Admin_Panel.Services
 
             return user;
         }
-        public async Task<User> Create(User user, string password)
+        public User Create(User user, string password)
         {
             // validation
             if (string.IsNullOrWhiteSpace(password))
                 throw new AppException("Password is required");
 
-            if (await _context.Users.AnyAsync(x => x.Username == user.Username))
+            if (_context.Users.Any(x => x.Username == user.Username))
                 throw new AppException("Username '" + user.Username + "' is already taken");
 
-            if (await _context.Users.AnyAsync(x => x.Email == user.Email))
+            if (_context.Users.Any(x => x.Email == user.Email))
                 throw new AppException("Email '" + user.Email + "' is already taken");
 
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
+            user.Password = null;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
+
+            user.PasswordHash = null;
+            user.PasswordSalt = null;
 
             return user;
         }
-        public async void Update(User userParam, string password = null)
+        public void Update(User userParam, string password = null)
         {
-            var user = await _context.Users.FindAsync(userParam.Id);
+            var user = _context.Users.Find(userParam.Id);
 
             if (user == null)
                 throw new AppException("User not found");
@@ -150,23 +155,29 @@ namespace IOTGW_Admin_Panel.Services
             if (userParam.Username != user.Username)
             {
                 // username has changed so check if the new username is already taken
-                if (await _context.Users.AnyAsync(x => x.Username == userParam.Username))
+                if (_context.Users.Any(x => x.Username == userParam.Username))
                     throw new AppException("Username " + userParam.Username + " is already taken");
             }
             if (userParam.Username != user.Username)
             {
                 // email has changed so check if the new username is already taken
-                if (await _context.Users.AnyAsync(x => x.Email == userParam.Email))
+                if (_context.Users.Any(x => x.Email == userParam.Email))
                     throw new AppException("Email " + userParam.Email + " is already taken");
             }
 
             _context.Entry(user).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             // update user properties
             user.FirstName = userParam.FirstName;
             user.LastName = userParam.LastName;
             user.Username = userParam.Username;
+            user.Email = userParam.Username;
+            user.Address = userParam.Address;
+            user.City = userParam.City;
+            user.Country = userParam.Country;
+            user.PostalCode = userParam.PostalCode;
+            user.CompanyName = userParam.CompanyName;
 
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(password))
@@ -179,11 +190,11 @@ namespace IOTGW_Admin_Panel.Services
             }
 
             _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
-        public async void Delete(int id)
+        public void Delete(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = _context.Users.Find(id);
 
             if (user == null)
                 throw new AppException("User not found");
@@ -191,7 +202,7 @@ namespace IOTGW_Admin_Panel.Services
             else
             {
                 _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 

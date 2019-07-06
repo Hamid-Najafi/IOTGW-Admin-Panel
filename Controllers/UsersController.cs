@@ -185,7 +185,7 @@ namespace IOTGW_Admin_Panel.Controllers
             catch (AppException ex)
             {
                 // return error message if there was an exception
-                return NotFound();
+                return NotFound(ex.Message);
             }
         }
     }

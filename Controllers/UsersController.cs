@@ -7,6 +7,7 @@ using IOTGW_Admin_Panel.Services;
 using Microsoft.AspNetCore.Authorization;
 using IOTGW_Admin_Panel.Helpers;
 using AutoMapper;
+using System;
 
 namespace IOTGW_Admin_Panel.Controllers
 {
@@ -103,22 +104,21 @@ namespace IOTGW_Admin_Panel.Controllers
         {
             // map dto to entity
             //var user = _mapper.Map<User>(userParam);
-            _context.Add(userParam);
-            _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetById), new { id = userParam.Id }, userParam);
+            // _context.Add(userParam);
+            // _context.SaveChangesAsync();
+            // return CreatedAtAction(nameof(GetById), new { id = userParam.Id }, userParam);
 
-            // try
-            // {
-            //     // save 
-            //     _userService.Create(userParam, userParam.Password);
-            //     return CreatedAtAction(nameof(GetById), new { id = userParam.Id }, userParam);
-            //     //return Ok();
-            // }
-            // catch (AppException ex)
-            // {
-            //     // return error message if there was an exception
-            //     return BadRequest(ex.Message);
-            // }
+            try
+            {
+                // save 
+                _userService.Create(userParam, userParam.Password);
+                return CreatedAtAction(nameof(GetById), new { id = userParam.Id }, userParam);
+                //return Ok();
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 

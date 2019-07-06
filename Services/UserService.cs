@@ -71,21 +71,22 @@ namespace WebApi.Services
         }
         public async Task<User> AuthenticatePass(string username, string password)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-                return null;
+            // if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            //     return null;
 
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
+            // var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
 
-            // check if username exists
-            if (user == null)
-                return null;
+            // // check if username exists
+            // if (user == null)
+            //     return null;
 
-            // check if password is correct
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-                return null;
+            // // check if password is correct
+            // if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            //     return null;
 
-            // authentication successful
-            return user;
+            // // authentication successful
+            // return user;
+            return null;
         }
         public IEnumerable<User> GetAll() //async
         {
@@ -131,11 +132,11 @@ namespace WebApi.Services
             if (await _context.Users.AnyAsync(x => x.Email == user.Email))
                 throw new AppException("Email '" + user.Email + "' is already taken");
 
-            byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            // byte[] passwordHash, passwordSalt;
+            // CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            // user.PasswordHash = passwordHash;
+            // user.PasswordSalt = passwordSalt;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -176,8 +177,8 @@ namespace WebApi.Services
                 byte[] passwordHash, passwordSalt;
                 CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-                user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt;
+                // user.PasswordHash = passwordHash;
+                // user.PasswordSalt = passwordSalt;
             }
 
             _context.Users.Update(user);

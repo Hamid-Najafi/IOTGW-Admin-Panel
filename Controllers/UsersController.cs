@@ -84,24 +84,28 @@ namespace IOTGW_Admin_Panel.Controllers
         /// </summary>
         /// <param user="User Item"></param> 
         [Authorize(Roles = Role.Admin)]
-        [HttpPost("register")]
+        //[HttpPost("register")]
+        [HttpPost]
         public IActionResult Register(User userParam)
         {
             // map dto to entity
-            var user = _mapper.Map<User>(userParam);
+            //var user = _mapper.Map<User>(userParam);
+            _context.Add(userParam);
+            _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetById), new { id = userParam.Id }, userParam);
 
-            try
-            {
-                // save 
-                _userService.Create(user, userParam.Password);
-                return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
-                //return Ok();
-            }
-            catch (AppException ex)
-            {
-                // return error message if there was an exception
-                return BadRequest(ex.Message);
-            }
+            // try
+            // {
+            //     // save 
+            //     _userService.Create(userParam, userParam.Password);
+            //     return CreatedAtAction(nameof(GetById), new { id = userParam.Id }, userParam);
+            //     //return Ok();
+            // }
+            // catch (AppException ex)
+            // {
+            //     // return error message if there was an exception
+            //     return BadRequest(ex.Message);
+            // }
         }
 
 
@@ -113,29 +117,35 @@ namespace IOTGW_Admin_Panel.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, User userParam)
         {
+
+            _context.Entry(userParam).State = EntityState.Modified;
+            _context.SaveChangesAsync();
+
+            return NoContent();
+
             // only allow admins to access other user records
-            var currentUserId = int.Parse(User.Identity.Name);
-            if (id != currentUserId && !User.IsInRole(Role.Admin))
-            {
-                return Forbid();
-            }
+            // var currentUserId = int.Parse(User.Identity.Name);
+            // if (id != currentUserId && !User.IsInRole(Role.Admin))
+            // {
+            //     return Forbid();
+            // }
 
-            // map dto to entity and set id
-            var user = _mapper.Map<User>(userParam);
-            user.Id = id;
+            // // map dto to entity and set id
+            // var user = _mapper.Map<User>(userParam);
+            // user.Id = id;
 
-            try
-            {
-                // save 
-                _userService.Update(user, userParam.Password);
-                return NoContent();
-                //return Ok();
-            }
-            catch (AppException ex)
-            {
-                // return error message if there was an exception
-                return BadRequest(ex.Message);
-            }
+            // try
+            // {
+            //     // save 
+            //     _userService.Update(user, userParam.Password);
+            //     return NoContent();
+            //     //return Ok();
+            // }
+            // catch (AppException ex)
+            // {
+            //     // return error message if there was an exception
+            //     return BadRequest(ex.Message);
+            // }
 
         }
 

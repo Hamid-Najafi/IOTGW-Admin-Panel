@@ -16,8 +16,8 @@ namespace IOTGW_Admin_Panel.Models
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
+        // public byte[] PasswordHash { get; set; }
+        // public byte[] PasswordSalt { get; set; }
         public string Token { get; set; }
 
         [DataType(DataType.EmailAddress)]

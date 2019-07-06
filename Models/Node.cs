@@ -1,5 +1,3 @@
-
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace IOTGW_Admin_Panel.Models

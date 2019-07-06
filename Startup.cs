@@ -1,21 +1,12 @@
 using IOTGW_Admin_Panel.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System.Reflection;
-using System.IO;
 using IOTGW_Admin_Panel.Helpers;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -147,7 +138,7 @@ namespace IOTGW_Admin_Panel
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
             });
-           // App.Use(context)
+            // App.Use(context)
 
             app.UseSpa(spa =>
             {

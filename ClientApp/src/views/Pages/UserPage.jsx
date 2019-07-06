@@ -6,6 +6,7 @@ import {
 import Card from 'components/Card/Card.jsx';
 import FormInputs from 'components/FormInputs/FormInputs.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 class UserPage extends Component {
     constructor(props) {
@@ -13,23 +14,120 @@ class UserPage extends Component {
         this.state = {
             user: []
         };
+
+        this.handleEmail = this.handleEmail.bind(this)
+        this.handleUsername = this.handleUsername.bind(this)
+        this.handleCompanyName = this.handleCompanyName.bind(this)
+        this.handleFirstName = this.handleFirstName.bind(this)
+        this.handleLastName = this.handleLastName.bind(this)
+        this.handleAdress = this.handleAdress.bind(this)
+        this.handleCity = this.handleCity.bind(this)
+        this.handleCountry = this.handleCountry.bind(this)
+        this.handlePostalCode = this.handlePostalCode.bind(this)
+        this.edit = this.edit.bind(this)
+
     }
+    
     
     componentDidMount() {
-        fetch("https://localhost:5001/api/Users/1")
-          .then(res => res.json())
-          .then(
-            (result) => {
-              this.setState({
-                user: result
-              });
-              console.log(this.state.user)
+        let token  = reactLocalStorage.getObject('userInfo').token;
+        let id = reactLocalStorage.getObject('userInfo').id;
+        console.log(id)
+        fetch("https://localhost:5001/api/Users/" + id , {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
             },
-        )
+        })
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        user: result.result
+                    });
+
+                },
+            )
+
+
     }
    
+    handleEmail(e) {
+        var usert = this.state.user;
+        usert.email = e.target.value;
+        this.setState({user: usert});
+    }
+    handleUsername(e) {
+        var usert = this.state.user;
+        usert.username = e.target.value;
+        this.setState({user: usert});
+    }
+    handleCompanyName(e) {
+        var usert = this.state.user;
+        usert.companyName = e.target.value;
+        this.setState({user: usert});
+    }
+    handleFirstName(e) {
+        var usert = this.state.user;
+        usert.firstName = e.target.value;
+        this.setState({user: usert});
+    }
+    handleLastName(e) {
+        var usert = this.state.user;
+        usert.lastName = e.target.value;
+        this.setState({user: usert});
+    }
+    handleAdress(e) {
+        var usert = this.state.user;
+        usert.address = e.target.value;
+        this.setState({user: usert});
+    }
+    handleCity(e) {
+        var usert = this.state.user;
+        usert.city = e.target.value;
+        this.setState({user: usert});
+    }
+    handleCountry(e) {
+        var usert = this.state.user;
+        usert.country = e.target.value;
+        this.setState({user: usert});
+    }
+    handlePostalCode(e) {
+        var usert = this.state.user;
+        usert.postalCode = e.target.value;
+        this.setState({user: usert});
+    }
+
+    edit() {
+        console.log(this.state.user)
+        let token  = reactLocalStorage.getObject('userInfo').token
+        let id = reactLocalStorage.getObject('userInfo').id;
+        console.log(token)
+        fetch("https://localhost:5001/api/Users/" + id , {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
+            },
+        })
+            .then(res => {
+                res.json();
+            })
+            .then(
+                (result) => {
+                    // this.setState({
+                    //     user: result
+                    // });
+                    console.log(result)
+                },
+            )
+    }
     
     render() {
+        console.log(this.state.user)
         return (            
             <div className="main-content">
                 <Grid fluid>
@@ -46,20 +144,25 @@ class UserPage extends Component {
                                                     label: "Company Name",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: this.state.user.companyName,
-                                                    disabled: false
+                                                    placeholder:"Company Name",
+                                                    onChange:this.handleCompanyName,
+                                                    // value: this.state.user.companyName
                                                 },
                                                 {
                                                     label: "Username",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: this.state.user.username,
+                                                    placeholder:"Username",
+                                                    onChange:this.handleUsername,
+                                                    // value: this.state.user.username,
                                                 },
                                                 {
                                                     label: "Email address",
                                                     type: "email",
                                                     bsClass: "form-control",
-                                                    placeholder:  this.state.user.email,
+                                                    placeholder:"email",
+                                                    // value:  this.state.user.email,
+                                                    onChange:this.handleEmail,
                                                 }
                                             ]}
                                         />
@@ -70,20 +173,26 @@ class UserPage extends Component {
                                                     label: "First name",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: this.state.user.firstName,
+                                                    placeholder:"First name",
+                                                    // value: this.state.user.firstName,
+                                                    onChange:this.handleFirstName,
                                                 },
                                                 {
                                                     label: "Last name",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: this.state.user.lastName
+                                                    placeholder:"Last name",    
+                                                    // value: this.state.user.lastName,
+                                                    onChange:this.handleLastName,
 
                                                 },
                                                 {
                                                     label: "Adress",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: this.state.user.address,
+                                                    placeholder:"Adress",
+                                                    // value: this.state.user.address,
+                                                    onChange:this.handleAdress,
                                                 }
                                             ]}
                                         />
@@ -95,19 +204,26 @@ class UserPage extends Component {
                                                     label: "City",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: this.state.user.city,
+                                                    placeholder:"City",
+                                                    // value: this.state.user.city,
+                                                    onChange:this.handleCity,
+
                                                 },
                                                 {
                                                     label: "Country",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: this.state.user.country,
+                                                    placeholder:"Country",
+                                                    // value: this.state.user.country,
+                                                    onChange:this.handleCountry,
                                                 },
                                                 {
                                                     label: "Postal Code",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: this.state.user.postalCode,
+                                                    placeholder:"Postal Code",
+                                                    // value: this.state.user.postalCode,
+                                                    onChange:this.handlePostalCode,
                                                 }
                                             ]}
                                         />
@@ -119,7 +235,8 @@ class UserPage extends Component {
                                             ftTextCenter
                                             fill
                                             wd
-                                            type="submit"
+                                            onClick ={this.edit}
+                                            type="button"
                                         >
                                             Update Profile
                                         </Button>

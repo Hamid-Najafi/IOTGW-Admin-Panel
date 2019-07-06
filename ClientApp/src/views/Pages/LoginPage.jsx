@@ -33,10 +33,15 @@ class LoginPage extends Component {
             body: JSON.stringify(temp)
         }).then((response) => response.json())
         .then((responseData) => {
-            
-            if (responseData.token != null) {
-                reactLocalStorage.setObject('userData', responseData)
-                this.props.history.push('/')
+            console.log(responseData.result)
+            if (responseData.result.token != null) {
+                let tempd =  responseData.result;
+                console.log(tempd)
+                reactLocalStorage.setObject('userInfo',tempd)
+
+                console.log(                reactLocalStorage.getObject('userInfo')
+                )
+                // this.props.history.push('/')
             } else {
                 console.log("user or pass is wrong")
             }
@@ -84,7 +89,7 @@ class LoginPage extends Component {
                                     <div>
                                         <Row>
                                             <Col md={12}>
-                                                <Button bsStyle="info" type="submit" onClick={this.publish} fill wd>
+                                                <Button bsStyle="info" type="submit" fill wd>
                                                     Login
                                             </Button>
                                             </Col>

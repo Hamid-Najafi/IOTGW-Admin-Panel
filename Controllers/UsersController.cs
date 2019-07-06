@@ -23,43 +23,6 @@ namespace IOTGW_Admin_Panel.Controllers
         {
             _context = context;
             _userService = userService;
-
-
-            if (_context.Users.Any())
-            {
-                return;
-            }
-            _context.Users.AddRangeAsync(
-              new User
-              {
-                  Username = "vaziri.shahla24",
-                  Password = "1234",
-                  FirstName = "Shahla",
-                  LastName = "Vaziri",
-                  //FullName = "Shahla Vaziri",
-                  Email = "vaziri.shahla24@gmail.com",
-                  Address = "Ferdowsi Campus",
-                  City = "Mashhad",
-                  EnrollmentDate = DateTime.Now,
-                  Roll = Roll.Admin
-              },
-              new User
-              {
-                  Username = "Hamid.najafi",
-                  Password = "1234",
-                  FirstName = "Hamid",
-                  LastName = "Najafi",
-                  //FullName = "Hamid Najafi",
-                  Email = "Hamid.Najafi@email.com",
-                  Address = "Ferdowsi Campus",
-                  City = "Mashhad",
-                  EnrollmentDate = DateTime.Now,
-                  Roll = Roll.Admin
-
-              }
-          );
-            _context.SaveChangesAsync();
-
         }
         /// <summary>
         /// authenticate and generate JSON Web Token (JWT) 

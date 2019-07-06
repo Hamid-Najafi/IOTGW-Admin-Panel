@@ -113,11 +113,6 @@ namespace IOTGW_Admin_Panel.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, User userParam)
         {
-            if (id != userParam.Id)
-            {
-                return BadRequest();
-            }
-
             // only allow admins to access other user records
             var currentUserId = int.Parse(User.Identity.Name);
             if (id != currentUserId && !User.IsInRole(Role.Admin))

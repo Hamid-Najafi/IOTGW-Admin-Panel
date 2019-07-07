@@ -134,7 +134,7 @@ namespace IOTGW_Admin_Panel.Controllers
         /// <param name="id"></param>   
         [HttpDelete("{id}")]
         [Authorize(Roles = Role.Admin)]
-        public IActionResult Delete(int id)
+        public IActionResult Deletenode(int id)
         {
             try
             {

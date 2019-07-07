@@ -50,7 +50,7 @@ namespace IOTGW_Admin_Panel
                 {
                     Version = "v0.1",
                     Title = "IOT Gateway API",
-                    Description = "IOT Gateway API for node and gateway managment",
+                    Description = "IOT Gateway API for node and gateway and nodes managment",
                     //TermsOfService = new Uri("https://example.com/terms"),
                     Contact = new OpenApiContact
                     {
@@ -94,7 +94,7 @@ namespace IOTGW_Admin_Panel
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGatewayService, GatewayService>();
-            //  services.AddScoped<INodeService, NodeService>();
+            services.AddScoped<INodeService, NodeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

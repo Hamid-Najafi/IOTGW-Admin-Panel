@@ -56,7 +56,7 @@ namespace IOTGW_Admin_Panel.Models
                 await _context.Gateways.AddRangeAsync(
                    new Gateway
                    {
-                       UserId = 2,
+                       UserId = 1,
                        Name = "IOT-Lab-Gateway-1",
                        Description = "Test Gateway to test admin panel functionality"
                    },
@@ -67,6 +67,37 @@ namespace IOTGW_Admin_Panel.Models
                        Description = "Test Gateway 2 to test admin panel functionality"
                    }
                );
+                await _context.Nodes.AddRangeAsync(
+                    new Node
+                    {
+                        Name = "Wifi",
+                        GatewayId = 1,
+                        Config = "?",
+                        Description = "ESP32",
+                        Type = NodeType.WiFi,
+                    }, new Node
+                    {
+                        Name = "Zigbee",
+                        GatewayId = 1,
+                        Config = "?",
+                        Description = "ZG-M1E",
+                        Type = NodeType.Zigbee,
+                    }, new Node
+                    {
+                        Name = "Bluetooth",
+                        GatewayId = 2,
+                        Config = "?",
+                        Description = " HC-05",
+                        Type = NodeType.Bluetooth,
+                    }, new Node
+                    {
+                        Name = "LoRa",
+                        GatewayId = 2,
+                        Config = "?",
+                        Description = "RN2483",
+                        Type = NodeType.Zigbee,
+                    }
+                );
 
                 await _context.SaveChangesAsync();
             }

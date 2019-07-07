@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using IOTGW_Admin_Panel.Helpers;
 using IOTGW_Admin_Panel.Models;
 
@@ -34,7 +28,7 @@ namespace IOTGW_Admin_Panel.Services
         {
             if (!_context.Gateways.Any())
                 throw new AppException("No Gateway");
-            // return _context.Gateways.Include(x => x.User).ToList();
+            return _context.Gateways.Include(x => x.User).ToList();
             return _context.Gateways.ToList();
 
 

@@ -9,6 +9,8 @@ namespace IOTGW_Admin_Panel.Models
     {
         public int Id { get; set; }
 
+        //[ForeignKey("UserId")]
+        public int UserId { get; set; }
 
         [Required]
         [StringLength(30)]
@@ -19,8 +21,7 @@ namespace IOTGW_Admin_Panel.Models
         public string Description { get; set; }
 
         // Navigation propertie
-        //[ForeignKey("UserId")]
-        public int UserId { get; set; }
+
         public User User { get; set; }
         public ICollection<Node> Nodes { get; set; }
 

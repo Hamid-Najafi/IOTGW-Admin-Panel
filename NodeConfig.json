@@ -1,0 +1,70 @@
+{
+    "WiFi": {
+        "SSID": "FUM-IOT-Lab",
+        "Password": "12345678",
+        "Security": "WPA2",
+        "Encryption": "AES",
+        "Channel": "auto",
+        "Hidden": "false",
+        "Band": {
+            "2.4Ghz": {
+                "State": "on",
+                "Mode": "bgn"
+            },
+            "5Ghz": {
+                "State": "off",
+                "Mode": "ac"
+            }
+        },
+        "Rate": "auto",
+        "DHCP": "server",
+        "Gateway": "dhcp",
+        "IP": "dhcp",
+        "Subnetmask": "dhcp",
+        "HttpServer": "true"
+    },
+    "Bluetooth": {
+        "LocalName": "HC-05",
+        "LocalPin": "1234",
+        "Security": "PIN",
+        "AutoConnnect": "false"
+    },
+    "Zigbee": {
+        "Type": "cordinator",
+        "PANID": "AABB",
+        "ExtPANID": "0011223344556677",
+        "NetworkAddr": "AA00",
+        "ExtNetworkAddr": "AA00000000000000",
+        "Channel": "12",
+        "CustomAddr": "0001",
+        "Mode": "5",
+        "Baud": "38400"
+    },
+    "LoRa": {
+        "VonnectionMode": {
+            "OOTA": {
+                "Device EUI": "int",
+                "Application EUI ": "int",
+                "Application Key": "int"
+            },
+            "ABP": {
+                "Device Address": "int",
+                "Network Session Key": "int",
+                "Application Session Key": "int"
+            }
+        },
+        "SelectedMode": "ABP"
+    },
+    "SIM800": {
+        "APN": "irancell",
+        "Username": "",
+        "Password": ""
+    },
+    "Ethernet": {
+        "Rate": "auto",
+        "DHCP": "server",
+        "Gateway": "dhcp",
+        "IP": "dhcp",
+        "Subnetmask": "dhcp"
+    }
+}

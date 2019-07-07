@@ -2,15 +2,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IOTGW_Admin_Panel.Models
 {
-    public enum NodeType
+    public static class NodeType
     {
-        WiFi, Zigbee, Bluetooth, LoRa, GSM, Ethernet
+        public const string WiFi = "WiFi";
+        public const string Zigbee = "Zigbee";
+        public const string Bluetooth = "Bluetooth";
+        public const string LoRa = "LoRa";
+        public const string GSM = "GSM";
+        public const string Ethernet = "Ethernet";
     }
-
     public class Node
     {
         public int Id { get; set; }
 
+        //[ForeignKey("GatewayId")]
         [Required]
         public int GatewayId { get; set; }
 
@@ -23,7 +28,7 @@ namespace IOTGW_Admin_Panel.Models
         [StringLength(100)]
         public string Description { get; set; }
         [Required]
-        public NodeType Type { get; set; }
+        public string Type { get; set; }
 
         // Navigation propertie
         public Gateway Gateway { get; set; }

@@ -25,7 +25,6 @@ namespace IOTGW_Admin_Panel.Controllers
             _context = context;
             _userService = userService;
             _mapper = mapper;
-
         }
 
         /// <summary>
@@ -54,12 +53,11 @@ namespace IOTGW_Admin_Panel.Controllers
         [Authorize(Roles = Role.Admin)]
         public ActionResult<IEnumerable<User>> GetAll()
         {
-
             try
             {
                 var users = _userService.GetAll();
-                //var usersMap = _mapper.Map<IList<User>>(users);
-                return Ok(users);
+                var userDtos = _mapper.Map<IList<User>>(users);
+                return Ok(userDtos);
             }
             catch (AppException ex)
             {
@@ -85,7 +83,8 @@ namespace IOTGW_Admin_Panel.Controllers
             try
             {
                 var user = _userService.GetById(id);
-                return Ok(user);
+                var userDto = _mapper.Map<User>(user);
+                return Ok(userDto);
             }
             catch (AppException ex)
             {
@@ -104,12 +103,12 @@ namespace IOTGW_Admin_Panel.Controllers
         public IActionResult Register(User userParam)
         {
             // map dto to entity
-            //var user = _mapper.Map<User>(userParam);
+            var userMap = _mapper.Map<User>(userParam);
             try
             {
                 // save 
-                _userService.Create(userParam, userParam.Password);
-                return CreatedAtAction(nameof(GetById), new { id = userParam.Id }, userParam);
+                _userService.Create(userMap, userParam.Password);
+                return CreatedAtAction(nameof(GetById), new { id = userMap.Id }, userMap);
                 //return Ok();
             }
             catch (AppException ex)
@@ -127,20 +126,19 @@ namespace IOTGW_Admin_Panel.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, User userParam)
         {
-
             //only allow admins to access other user records
             var currentUserId = int.Parse(User.Identity.Name);
             if (id != currentUserId && !User.IsInRole(Role.Admin))
                 return Forbid();
 
             // map dto to entity and set id
-            // var userMap = _mapper.Map<User>(userParam);
-            // user.Id = id;
+            var userMap = _mapper.Map<User>(userParam);
+            // userParam.Id = id;
 
             try
             {
                 // save 
-                _userService.Update(userParam, userParam.Password);
+                _userService.Update(userMap, id, userMap.Password);
                 return NoContent();
                 //return Ok();
             }
@@ -175,6 +173,10 @@ namespace IOTGW_Admin_Panel.Controllers
             {
                 // return error message if there was an exception
                 return NotFound(ex.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
             }
         }
     }

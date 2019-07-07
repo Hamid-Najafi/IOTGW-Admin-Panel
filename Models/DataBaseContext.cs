@@ -11,7 +11,7 @@ namespace IOTGW_Admin_Panel.Models
         public DbSet<IOTGW_Admin_Panel.Models.User> Users { get; set; }
         public DbSet<IOTGW_Admin_Panel.Models.Gateway> Gateways { get; set; }
         public DbSet<IOTGW_Admin_Panel.Models.Node> Nodes { get; set; }
-
+        public DbSet<IOTGW_Admin_Panel.Models.Message> Messages { get; set; }
 
         // protected override void OnModelCreating(ModelBuilder modelBuilder)
         // {

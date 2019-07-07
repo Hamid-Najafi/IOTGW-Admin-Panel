@@ -20,7 +20,7 @@ namespace IOTGW_Admin_Panel.Services
         IEnumerable<User> GetAll();
         User GetById(int id);
         User Create(User user, string password);
-        void Update(User user, string password = null);
+        void Update(User user, int id, string password = null);
         void Delete(int id);
     }
 
@@ -145,39 +145,58 @@ namespace IOTGW_Admin_Panel.Services
 
             return user;
         }
-        public void Update(User userParam, string password = null)
+        public void Update(User userParam, int id, string password = null)
         {
-            var user = _context.Users.Find(userParam.Id);
+            var user = _context.Users.Find(id);
 
             if (user == null)
                 throw new AppException("User not found");
 
-            if (userParam.Username != user.Username)
+            if (userParam.Username != null)
             {
-                // username has changed so check if the new username is already taken
-                if (_context.Users.Any(x => x.Username == userParam.Username))
-                    throw new AppException("Username " + userParam.Username + " is already taken");
+                if (userParam.Username != user.Username)
+                {
+                    // username has changed so check if the new username is already taken
+                    if (_context.Users.Any(x => x.Username == userParam.Username))
+                        throw new AppException("Username " + userParam.Username + " is already taken");
+                }
+                user.Username = userParam.Username;
             }
-            if (userParam.Username != user.Username)
+            if (userParam.Email != null)
             {
-                // email has changed so check if the new username is already taken
-                if (_context.Users.Any(x => x.Email == userParam.Email))
-                    throw new AppException("Email " + userParam.Email + " is already taken");
+                if (userParam.Email != user.Email)
+                {
+                    // email has changed so check if the new email is already taken
+                    if (_context.Users.Any(x => x.Email == userParam.Email))
+                        throw new AppException("Email " + userParam.Email + " is already taken");
+                }
+                user.Email = userParam.Username;
             }
 
-            _context.Entry(user).State = EntityState.Modified;
-            _context.SaveChanges();
+            // _context.Entry(user).State = EntityState.Modified;
+            // _context.SaveChanges();
 
             // update user properties
-            user.FirstName = userParam.FirstName;
-            user.LastName = userParam.LastName;
-            user.Username = userParam.Username;
-            user.Email = userParam.Username;
-            user.Address = userParam.Address;
-            user.City = userParam.City;
-            user.Country = userParam.Country;
-            user.PostalCode = userParam.PostalCode;
-            user.CompanyName = userParam.CompanyName;
+            if (!string.IsNullOrWhiteSpace(userParam.FirstName))
+                user.FirstName = userParam.FirstName;
+
+            if (!string.IsNullOrWhiteSpace(userParam.LastName))
+                user.LastName = userParam.LastName;
+
+            if (!string.IsNullOrWhiteSpace(userParam.Address))
+                user.Address = userParam.Address;
+
+            if (!string.IsNullOrWhiteSpace(userParam.City))
+                user.City = userParam.City;
+
+            if (!string.IsNullOrWhiteSpace(userParam.Country))
+                user.Country = userParam.Country;
+
+            if (userParam.PostalCode != 0)
+                user.PostalCode = userParam.PostalCode;
+
+            if (!string.IsNullOrWhiteSpace(userParam.CompanyName))
+                user.CompanyName = userParam.CompanyName;
 
             // update password if it was entered
             if (!string.IsNullOrWhiteSpace(password))

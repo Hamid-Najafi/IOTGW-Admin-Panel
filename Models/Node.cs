@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace IOTGW_Admin_Panel.Models
@@ -32,6 +33,7 @@ namespace IOTGW_Admin_Panel.Models
 
         // Navigation propertie
         public Gateway Gateway { get; set; }
+        public ICollection<Message> Messages { get; set; }
 
     }
 }

@@ -99,6 +99,20 @@ namespace IOTGW_Admin_Panel.Models
                     }
                 );
 
+                await _context.Messages.AddRangeAsync(
+                new Message
+                {
+                    NodeId = 1,
+                    SourceNode = "Client in Lab",
+                    Data = "What hath God wrought"
+                }, new Message
+                {
+                    NodeId = 2,
+                    SourceNode = "Client in Home",
+                    Data = "Mr. Watson, come here. I want to see you"
+                }
+                );
+
                 await _context.SaveChangesAsync();
             }
         }

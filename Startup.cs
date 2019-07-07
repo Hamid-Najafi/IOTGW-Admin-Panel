@@ -95,6 +95,7 @@ namespace IOTGW_Admin_Panel
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGatewayService, GatewayService>();
             services.AddScoped<INodeService, NodeService>();
+            services.AddScoped<IMessageService, MessageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -142,17 +143,16 @@ namespace IOTGW_Admin_Panel
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
             });
-            // App.Use(context)
 
             // app.UseSpa(spa =>
             // {
             //     spa.Options.SourcePath = "ClientApp";
 
-            //     if (env.IsDevelopment())
-            //     {
-            //         spa.UseReactDevelopmentServer(npmScript: "start");
-            //     }
-            // });
+            //         if (env.IsDevelopment())
+            //         {
+            //             spa.UseReactDevelopmentServer(npmScript: "start");
+            //         }
+            //     });
         }
     }
 }

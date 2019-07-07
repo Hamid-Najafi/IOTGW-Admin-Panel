@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace IOTGW_Admin_Panel.Models
@@ -7,16 +8,24 @@ namespace IOTGW_Admin_Panel.Models
     {
         public int Id { get; set; }
 
+        public int NodeId { get; set; }
+
         [Required]
         public string SourceNode { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public string RecievedDate { get; set; }
+        [DataType(DataType.DateTime)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime RecievedDateTime { get; set; }
 
         [Required]
         public string Data { get; set; }
+        public Message()
+        {
+            RecievedDateTime = DateTime.Now;
+        }
+
+        public Node Node { get; set; }
 
     }
 }

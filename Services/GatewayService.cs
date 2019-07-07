@@ -28,11 +28,8 @@ namespace IOTGW_Admin_Panel.Services
         {
             if (!_context.Gateways.Any())
                 throw new AppException("No Gateway");
-            return _context.Gateways.Include(x => x.User).ToList();
+            //return _context.Gateways.Include(x => x.User).ToList();
             return _context.Gateways.ToList();
-
-
-
         }
         public Gateway GetById(int id)
         {

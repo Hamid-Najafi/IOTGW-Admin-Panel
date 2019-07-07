@@ -13,32 +13,32 @@ namespace IOTGW_Admin_Panel.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class NodesController : ControllerBase
+    public class MessagesController : ControllerBase
     {
         private readonly DataBaseContext _context;
-        private INodeService _nodeService;
+        private IMessageService _messageService;
         private IMapper _mapper;
 
-        public NodesController(DataBaseContext context, INodeService nodeService, IMapper mapper)
+        public MessagesController(DataBaseContext context, IMessageService messageService, IMapper mapper)
         {
             _context = context;
-            _nodeService = nodeService;
+            _messageService = messageService;
             _mapper = mapper;
         }
 
         /// <summary>
-        /// gets nodes list.
+        /// gets messages list.
         /// </summary>
         [HttpGet]
         [Authorize(Roles = Role.Admin)]
         [Produces("application/json")]
-        public ActionResult<IEnumerable<Node>> GetAll()
+        public ActionResult<IEnumerable<Message>> GetAll()
         {
             try
             {
-                var nodes = _nodeService.GetAll();
-                var nodeMap = _mapper.Map<IList<Node>>(nodes);
-                return Ok(nodeMap);
+                var messages = _messageService.GetAll();
+                var messageMap = _mapper.Map<IList<Message>>(messages);
+                return Ok(messageMap);
             }
             catch (AppException ex)
             {
@@ -48,24 +48,24 @@ namespace IOTGW_Admin_Panel.Controllers
         }
 
         /// <summary>
-        /// gets a specific node.
+        /// gets a specific message.
         /// </summary>
         /// <param id="Id"></param> 
         [HttpGet("{id}")]
         [Produces("application/json")]
-        public ActionResult<Node> GetById(int id)
+        public ActionResult<Message> GetById(int id)
         {
             var currentUserId = int.Parse(User.Identity.Name);
 
             try
             {
-                var node = _nodeService.GetById(id);
+                var message = _messageService.GetById(id);
 
-                if (node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                if (message.Node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
                     return Forbid();
 
-                var nodeMap = _mapper.Map<Node>(node);
-                return Ok(nodeMap);
+                var messageMap = _mapper.Map<Message>(message);
+                return Ok(messageMap);
             }
             catch (AppException ex)
             {
@@ -75,20 +75,20 @@ namespace IOTGW_Admin_Panel.Controllers
         }
 
         /// <summary>
-        /// Ctreate new node.
+        /// Ctreate new message.
         /// </summary>
-        /// <param node="node Item"></param> 
+        /// <param message="message Item"></param> 
         [Authorize(Roles = Role.Admin)]
         //[HttpPost("register")]
         [HttpPost]
         [Produces("application/json")]
-        public IActionResult Create(Node nodeParam)
+        public IActionResult Create(Message messageParam)
         {
-            var nodeMap = _mapper.Map<Node>(nodeParam);
+            var messageMap = _mapper.Map<Message>(messageParam);
             try
             {
-                _nodeService.Create(nodeMap);
-                return CreatedAtAction(nameof(GetById), new { id = nodeMap.Id }, nodeMap);
+                _messageService.Create(messageMap);
+                return CreatedAtAction(nameof(GetById), new { id = messageMap.Id }, messageMap);
                 //return Ok();
             }
             catch (AppException ex)
@@ -98,47 +98,16 @@ namespace IOTGW_Admin_Panel.Controllers
         }
 
         /// <summary>
-        /// Update a specific node.
-        /// </summary>
-        /// <param name="id"></param>   
-        /// <param node="node Item"></param>   
-        [HttpPut("{id}")]
-        public IActionResult Update(int id, Node nodeParam)
-        {
-            //only allow admins to access other node records
-            var currentUserId = int.Parse(User.Identity.Name);
-
-            if (nodeParam.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
-                return Forbid();
-
-            var nodeMap = _mapper.Map<Node>(nodeParam);
-            nodeMap.Id = id;
-
-            try
-            {
-                // save 
-                _nodeService.Update(nodeMap);
-                return NoContent();
-                //return Ok();
-            }
-            catch (AppException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-        }
-
-        /// <summary>
-        /// Deletes a specific node.
+        /// Deletes a specific message.
         /// </summary>
         /// <param name="id"></param>   
         [HttpDelete("{id}")]
         [Authorize(Roles = Role.Admin)]
-        public IActionResult Deletenode(int id)
+        public IActionResult Deletemessage(int id)
         {
             try
             {
-                _nodeService.Delete(id);
+                _messageService.Delete(id);
                 return NoContent();
                 //return Ok();
             }

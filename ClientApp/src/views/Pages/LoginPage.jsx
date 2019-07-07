@@ -17,13 +17,15 @@ class LoginPage extends Component {
             password: null
         };
     }
- 
+
+   
     handleSubmit(event) {
 
         var temp = {
             "username": event.target.elements.username.value,
             "password": event.target.elements.password.value
         }
+        console.log(temp)
         fetch("https://localhost:5001/api/Users/authenticate",{
             method: 'POST',
             headers: {
@@ -33,15 +35,12 @@ class LoginPage extends Component {
             body: JSON.stringify(temp)
         }).then((response) => response.json())
         .then((responseData) => {
-            console.log(responseData.result)
-            if (responseData.result.token != null) {
-                let tempd =  responseData.result;
+            console.log(responseData)
+            if (responseData.token != null) {
+                let tempd =  responseData;
                 console.log(tempd)
                 reactLocalStorage.setObject('userInfo',tempd)
-
-                console.log(                reactLocalStorage.getObject('userInfo')
-                )
-                // this.props.history.push('/')
+                this.props.history.push('/')
             } else {
                 console.log("user or pass is wrong")
             }
@@ -50,6 +49,7 @@ class LoginPage extends Component {
     }
     render() {
         return (
+            
             <Grid>
                 <Row>
                     <Col md={4} sm={6} mdOffset={4} smOffset={3}>

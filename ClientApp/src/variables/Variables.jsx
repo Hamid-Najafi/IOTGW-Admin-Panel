@@ -44,7 +44,7 @@ const devices_tdArray = [
     ["Zigbee 2", "ASD42HF66", "Description text", "Device type"]
 ];
 // gateway lists
-const gateway_thArray = ["Name", "Description"];
+const gateway_thArray = ["Name", "description"];
 const gateway_tdArray = [
     ["Gateway1", "Description text"],
     ["Gateway2", "Description text"]

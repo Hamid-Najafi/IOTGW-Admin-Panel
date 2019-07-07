@@ -22,7 +22,6 @@ class usersList extends Component {
     componentWillMount() {
 
         let token  = reactLocalStorage.getObject('userInfo').token
-        console.log(this.state.users)
 
         fetch("https://localhost:5001/api/Users" , {
             method: 'GET',
@@ -105,7 +104,7 @@ class usersList extends Component {
                                     </Table>
                                 }
                                 legend={
-                                    <Link to="/pages/register-page" >
+                                    <Link to="/users/add" >
                                         <Button bsStyle="info" fill wd>
                                             Add User
                                         </Button>

@@ -9,6 +9,11 @@ import Card from 'components/Card/Card.jsx';
 
 import Button from 'elements/CustomButton/CustomButton.jsx';
 
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
+
+
 class addGateway extends Component {
     constructor(props) {
         super(props);
@@ -42,6 +47,26 @@ class addGateway extends Component {
             console.log(response)
             if(response.status ==201){
                 response.json()
+                MySwal.fire({
+                    onOpen: () => {
+                
+                      MySwal.clickConfirm()
+                    }
+                  }).then(() => {
+                    return MySwal.fire(<p>Gateway successfully added.</p>)
+                  })
+
+            }else {
+                MySwal.fire({
+
+                    onOpen: () => {
+
+                      MySwal.clickConfirm()
+                    }
+                  }).then(() => {
+                    return MySwal.fire(<p>Sorry. Something wrong happened</p>)
+                  })
+
             }
             
         })

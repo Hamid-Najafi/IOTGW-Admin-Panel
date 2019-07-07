@@ -7,6 +7,9 @@ import Card from 'components/Card/Card.jsx';
 import FormInputs from 'components/FormInputs/FormInputs.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 import {reactLocalStorage} from 'reactjs-localstorage';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 
 class UserPage extends Component {
     constructor(props) {
@@ -51,15 +54,15 @@ class UserPage extends Component {
                 if(res.status>399 && res.status<500) {
                     this.props.history.push('/login')
                 }
-                console.log(32)
                 return res.json()
             })
             .then(
                 (result) => {
-                    console.log(result)
                     this.setState({
                         user: result
                     });
+
+
                 },
             )
 
@@ -115,6 +118,7 @@ class UserPage extends Component {
     edit() {
         let token  = reactLocalStorage.getObject('userInfo').token
         let id = reactLocalStorage.getObject('userInfo').id;
+        console.log(id)
         fetch("https://localhost:5001/api/Users/" + id , {
             method: 'PUT',
             headers: {
@@ -126,7 +130,17 @@ class UserPage extends Component {
         })
             .then(res => {
                 console.log(res)
-                // res.json();
+                if(res.status == 204){
+                    MySwal.fire({
+                        onOpen: () => {
+                    
+                          MySwal.clickConfirm()
+                        }
+                      }).then(() => {
+                        return MySwal.fire(<p>Info successfully updated.</p>)
+                      })
+                }
+                reactLocalStorage.setObject('userInfo',this.state.user)
             })
             
         }

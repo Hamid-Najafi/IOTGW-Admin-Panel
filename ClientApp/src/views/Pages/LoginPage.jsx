@@ -19,6 +19,7 @@ class LoginPage extends Component {
         this.state = {
             cardHidden: true,
             username: null,
+            role:"User",
             password: null
         };
     }
@@ -40,8 +41,8 @@ class LoginPage extends Component {
             body: JSON.stringify(temp)
         }).then((response) => response.json())
         .then((responseData) => {
-            if (responseData.token != null) {
-                let tempd =  responseData;
+            if (responseData.result.token != null) {
+                let tempd =  responseData.result;
                 reactLocalStorage.setObject('userInfo',tempd)
                 this.props.history.push('/')
             } else {

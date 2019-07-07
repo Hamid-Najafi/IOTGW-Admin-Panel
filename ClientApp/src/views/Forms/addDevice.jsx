@@ -23,6 +23,7 @@ class addDevice extends Component {
         this.state = {
             name: null,
             description: null,
+            gatewayid:null,
             type: null
 
         }
@@ -41,10 +42,11 @@ class addDevice extends Component {
         var temp = {
             "name": event.target.elements.name.value,
             "type": event.target.elements.type.value,
+            "gatewayId":event.target.elements.gatewayid.value,
             "config": "string",
             "description": event.target.elements.description.value
         }
-        fetch("https://localhost:5001/api/gateway/Node", {
+        fetch("https://localhost:5001/api/Nodes", {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -54,6 +56,7 @@ class addDevice extends Component {
             },
             body: JSON.stringify(temp)
         }).then((response) => {
+            console.log(response)
             if (response.status == 201) {
                 response.json()
                 MySwal.fire({
@@ -120,10 +123,10 @@ class addDevice extends Component {
                                                 <FormControl    
                                                     inputRef={ (ref) => this.state.name=ref }
                                                     componentClass="select" placeholder="Type">
-                                                    <option value="1">WiFi</option>
-                                                    <option value="2">Zigbee</option>
-                                                    <option value="3">Lora</option>
-                                                    <option value="4">Bluetooth</option>
+                                                    <option value="wifi">WiFi</option>
+                                                    <option value="zigbee">Zigbee</option>
+                                                    <option value="lora">Lora</option>
+                                                    <option value="bluetooth">Bluetooth</option>
                                                 </FormControl>
                                                 </Col>
                                                 </FormGroup>
@@ -143,7 +146,21 @@ class addDevice extends Component {
                                                     />
                                                 </Col>
                                             </FormGroup> */}
-                                            
+                                            <FormGroup controlId="gatewayid">
+                                                <Col componentClass={ControlLabel} sm={2} smOffset={2}>
+                                                    Gateway Id
+                                                </Col>
+                                                <Col sm={6}>
+                                                    <FormControl
+
+                                                        type="number"
+                                                        placeholder="Gateway Id"
+                                                        inputRef={(ref) => {
+                                                            this.state.gatewayid = ref
+                                                        }}
+                                                    />
+                                                </Col>
+                                            </FormGroup>
                                             <FormGroup controlId="description">
                                                 <Col componentClass={ControlLabel} sm={2} smOffset={2}>
                                                     Description

@@ -21,6 +21,7 @@ class addGateway extends Component {
         this.state = {
 
             name: null,
+            userid:null,
             description: null
 
 
@@ -32,9 +33,10 @@ class addGateway extends Component {
 
         var temp = {
             "name": event.target.elements.name.value,
+            "userId":event.target.elements.userid.value,
             "description": event.target.elements.description.value
         }
-        fetch("https://localhost:5001/api/Gateway", {
+        fetch("https://localhost:5001/api/Gateways", {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -98,6 +100,21 @@ class addGateway extends Component {
                                                         placeholder="Name"
                                                         inputRef={(ref) => {
                                                             this.state.name = ref
+                                                        }}
+                                                    />
+                                                </Col>
+                                            </FormGroup>
+                                            <FormGroup controlId="userid">
+                                                <Col componentClass={ControlLabel} sm={2} smOffset={2}>
+                                                    User Id
+                                                </Col>
+                                                <Col sm={6}>
+                                                    <FormControl
+
+                                                        type="number"
+                                                        placeholder="User Id"
+                                                        inputRef={(ref) => {
+                                                            this.state.userid = ref
                                                         }}
                                                     />
                                                 </Col>

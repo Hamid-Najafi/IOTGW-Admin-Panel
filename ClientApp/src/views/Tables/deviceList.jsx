@@ -30,7 +30,7 @@ class deviceList extends Component {
         let token = reactLocalStorage.getObject('userInfo').token
 
 
-        fetch("https://localhost:5001/api/gateway/Node?token=" + token, {
+        fetch("https://localhost:5001/api/Nodes" , {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

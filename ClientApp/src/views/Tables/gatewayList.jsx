@@ -23,9 +23,9 @@ class gatewayList extends Component {
     componentWillMount() {
 
         let token = reactLocalStorage.getObject('userInfo').token
+        // console.log(token)
 
-
-        fetch("https://localhost:5001/api/Gateway", {
+        fetch("https://localhost:5001/api/Gateways", {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -37,16 +37,14 @@ class gatewayList extends Component {
             .then(res => {
                 if (res.status > 399 && res.status < 500) {
                     this.props.history.push('/login')
-                }
-                console.log(32)
-                return res.json()
+                }else return res.json()
             })
             .then(
                 (result) => {
                     this.setState({
                         gateways: result
                     });
-
+                    console.log(result)
 
                 },
             )

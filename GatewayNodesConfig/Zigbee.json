@@ -1,0 +1,13 @@
+{
+    "Zigbee": {
+        "Type": "cordinator",
+        "PANID": "AABB",
+        "ExtPANID": "0011223344556677",
+        "NetworkAddr": "AA00",
+        "ExtNetworkAddr": "AA00000000000000",
+        "Channel": "12",
+        "CustomAddr": "0001",
+        "Mode": "5",
+        "Baud": "38400"
+    }
+}

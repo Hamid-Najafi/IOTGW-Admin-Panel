@@ -1,0 +1,9 @@
+{
+    "Ethernet": {
+        "Rate": "auto",
+        "DHCP": "server",
+        "Gateway": "dhcp",
+        "IP": "dhcp",
+        "Subnetmask": "dhcp"
+    }
+}

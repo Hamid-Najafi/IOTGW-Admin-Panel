@@ -1,0 +1,17 @@
+{
+    "LoRa": {
+        "VonnectionMode": {
+            "OOTA": {
+                "Device EUI": "int",
+                "Application EUI ": "int",
+                "Application Key": "int"
+            },
+            "ABP": {
+                "Device Address": "int",
+                "Network Session Key": "int",
+                "Application Session Key": "int"
+            }
+        },
+        "SelectedMode": "ABP"
+    }
+}

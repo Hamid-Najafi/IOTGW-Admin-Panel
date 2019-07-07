@@ -125,6 +125,9 @@ namespace IOTGW_Admin_Panel.Services
             if (string.IsNullOrWhiteSpace(password))
                 throw new AppException("Password is required");
 
+            if (string.IsNullOrWhiteSpace(user.Role))
+                throw new AppException("Role is required");
+
             if (_context.Users.Any(x => x.Username == user.Username))
                 throw new AppException("Username '" + user.Username + "' is already taken");
 

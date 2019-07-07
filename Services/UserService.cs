@@ -4,12 +4,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using IOTGW_Admin_Panel.Helpers;
-using IOTGW_Admin_Panel.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using IOTGW_Admin_Panel.Helpers;
+using IOTGW_Admin_Panel.Models;
 
 namespace IOTGW_Admin_Panel.Services
 {
@@ -170,7 +169,7 @@ namespace IOTGW_Admin_Panel.Services
                     if (_context.Users.Any(x => x.Email == userParam.Email))
                         throw new AppException("Email " + userParam.Email + " is already taken");
                 }
-                user.Email = userParam.Username;
+                user.Email = userParam.Email;
             }
 
             // _context.Entry(user).State = EntityState.Modified;

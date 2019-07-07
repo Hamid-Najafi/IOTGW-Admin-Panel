@@ -1,14 +1,12 @@
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using IOTGW_Admin_Panel.Models;
 using IOTGW_Admin_Panel.Services;
-using Microsoft.AspNetCore.Authorization;
 using IOTGW_Admin_Panel.Helpers;
 using AutoMapper;
-using System;
-using Microsoft.AspNetCore.Http;
 
 namespace IOTGW_Admin_Panel.Controllers
 {

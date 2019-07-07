@@ -22,6 +22,7 @@ class RegisterPage extends Component {
             username: null,
             password: null,
             email: null,
+            role:null,
             passwordConfirm: null
 
         };
@@ -33,7 +34,7 @@ class RegisterPage extends Component {
             "username": event.target.elements.username.value,
             "password": event.target.elements.password.value,
             "email": event.target.elements.email.value,
-            "role": "User"
+            "role": event.target.elements.role.value
 
         }
         console.log(temp)
@@ -86,79 +87,7 @@ class RegisterPage extends Component {
 
     }
     render() {
-    //     return (
-    //         <Grid>
-    //             <Row>
-    //                 <Col md={8} mdOffset={2}>
-    //                     <div className="header-text">
-    //                         <h2 style={{
-    //     textAlign:'center'
-    //   }}>Legace Gateway</h2>
-    //                         <hr />
-    //                     </div>
-    //                 </Col>
-    //                 <Col md={4} mdOffset={4}>
-                    
-                        // <form onSubmit={(e) => this.handleSubmit(e)}>
-                        //     <Card
-                        //         plain
-                        //         hidden={this.state.cardHidden}
-                        //         content={
-                        //             <div>
-                        //                 <FormGroup controlId="username">
-                        //                     <FormControl
 
-                        //                         type="text"
-                        //                         placeholder="Your User Name"
-                        //                         inputRef={(ref) => {
-                        //                             this.state.username = ref
-                        //                         }}
-                        //                     />
-                        //                 </FormGroup>
-
-
-                        //                 <FormGroup controlId="email">
-                        //                     <FormControl
-                        //                         type="email"
-                        //                         placeholder="Enter Email"
-                        //                         inputRef={(ref) => {
-                        //                             this.state.email = ref
-                        //                         }}
-                        //                     />
-                        //                 </FormGroup>
-                        //                 <FormGroup controlId="password">
-                        //                     <FormControl
-                        //                         type="password"
-                        //                         placeholder="Password"
-                        //                         inputRef={(ref) => {
-                        //                             this.state.password = ref
-                        //                         }}
-                        //                     />
-                        //                 </FormGroup>
-                        //                 <FormGroup controlId="passwordConfirm">
-                        //                     <FormControl
-                        //                         type="password"
-                        //                         placeholder="Password Confirmation"
-                        //                         inputRef={(ref) => {
-                        //                             this.state.passwordConfirm = ref
-                        //                         }}
-                        //                     />
-                        //                 </FormGroup>
-                        //             </div>
-                        //         }
-                        //         ftTextCenter
-                        //         legend={
-                        //             <Button wd fill type="submit" neutral>
-                        //                 Create Account
-                        //             </Button>
-                        //         }
-                        //     />
-                        // </form>
-    //                 </Col>
-                    
-    //             </Row>
-    //         </Grid>
-    //     );
     return (
         <div className="main-content">
             <Grid fluid>
@@ -189,6 +118,15 @@ class RegisterPage extends Component {
                                                 placeholder="Enter Email"
                                                 inputRef={(ref) => {
                                                     this.state.email = ref
+                                                }}
+                                            />
+                                        </FormGroup>
+                                        <FormGroup controlId="role">
+                                            <FormControl
+                                                type="name"
+                                                placeholder="User Role"
+                                                inputRef={(ref) => {
+                                                    this.state.role = ref
                                                 }}
                                             />
                                         </FormGroup>

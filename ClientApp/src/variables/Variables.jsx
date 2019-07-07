@@ -51,7 +51,7 @@ const gateway_tdArray = [
 ];
 
 // gateway lists
-const users_thArray = ["username", "email"];
+const users_thArray = ["username", "role", "email"];
 const users_tdArray = [
     ["Sadjad Momeni", "1", "sajad@gmail.com"],
     ["Hamid Najafi", "2" , "hamid@gmail.com"]

@@ -29,7 +29,7 @@ class deviceList extends Component {
 
         let token = reactLocalStorage.getObject('userInfo').token
 
-
+        var gwId = this.props.location.state;
         fetch("https://localhost:5001/api/Nodes" , {
             method: 'GET',
             headers: {

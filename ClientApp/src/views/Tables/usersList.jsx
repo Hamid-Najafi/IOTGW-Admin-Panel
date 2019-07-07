@@ -54,12 +54,13 @@ class usersList extends Component {
 
     renderTableData() {
         return this.state.users.map((user, index) => {
-            const { id, username, email } = user //destructuring
+            const { id, username, email , role} = user //destructuring
             let idT = id;
             return (
                 <tr key={id}>
                     <td>{id}</td>
                     <td>{username}</td>
+                    <td>{role}</td>
                     <td>{email}</td>
                     <td className="text-left">
                         {/* <a  onClick={alert('alert')}>

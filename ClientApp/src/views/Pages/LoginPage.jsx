@@ -29,6 +29,7 @@ class LoginPage extends Component {
 
         var temp = {
             "username": event.target.elements.username.value,
+            // "role":"User",
             "password": event.target.elements.password.value
         }
         console.log(temp)
@@ -41,8 +42,9 @@ class LoginPage extends Component {
             body: JSON.stringify(temp)
         }).then((response) => response.json())
         .then((responseData) => {
-            if (responseData.result.token != null) {
-                let tempd =  responseData.result;
+            console.log(responseData)
+            if (responseData.token != null) {
+                let tempd =  responseData;
                 reactLocalStorage.setObject('userInfo',tempd)
                 this.props.history.push('/')
             } else {

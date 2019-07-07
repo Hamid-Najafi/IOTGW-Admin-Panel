@@ -23,6 +23,7 @@ class addUser extends Component {
         this.state = {
             name: null,
             email: null,
+            role:null,
             password: null,
             id:null
 
@@ -48,6 +49,7 @@ class addUser extends Component {
         var temp = {
             "username": event.target.elements.name.value,
             "email": event.target.elements.email.value,
+            "role": event.target.elements.role.value,
             "password": event.target.elements.password.value
         }
         fetch("https://localhost:5001/api/Users", {
@@ -134,6 +136,20 @@ class addUser extends Component {
                                                     />
                                                 </Col>
                                             </FormGroup>
+                                            <FormGroup controlId="role">
+                                            <Col componentClass={ControlLabel} sm={2} smOffset={2}>
+                                                    User role
+                                                </Col>
+                                                <Col sm={6}>
+                                                <FormControl    
+                                                    inputRef={ (ref) => this.state.role=ref }
+                                                    componentClass="select" placeholder="Type">
+                                                    <option value="Admin">Admin</option>
+                                                    <option value="User">User</option>
+                                                    
+                                                </FormControl>
+                                                </Col>
+                                                </FormGroup>
                                             <FormGroup controlId="password">
                                                 <Col componentClass={ControlLabel} sm={2} smOffset={2}>
                                                     Password

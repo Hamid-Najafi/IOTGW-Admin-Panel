@@ -53,21 +53,21 @@ class gatewayList extends Component {
     renderTableData() {
         return this.state.gateways.map((gw, index) => {
             const { id, name, description } = gw //destructuring
-            var s = "/gateways/" + id
             return (
                 <tr key={id}>
                     <td>{id}</td>
                     <td>{name}</td>
                     <td>{description}</td>
                     <td className="text-left">
-                        <Link to={s}>
-                            <a href={s} className="btn btn-simple btn-warning btn-icon edit">show nodes</a>
+                    <Link to={{ pathname: '/gateways/nodes', state: { id: id} }}>
+                            <a className="btn btn-simple btn-warning btn-icon edit">show</a>
                         </Link>
                     </td>
                     <td className="text-left">
-                        <Link to={s}>
-                            <a href={s} className="btn btn-simple btn-warning btn-icon edit">edit</a>
+                    <Link to={{ pathname: '/gateways/edit', state: { id: id} }}>
+                            <a className="btn btn-simple btn-warning btn-icon edit">edit</a>
                         </Link>
+                        
                     </td>
                 </tr>
             )

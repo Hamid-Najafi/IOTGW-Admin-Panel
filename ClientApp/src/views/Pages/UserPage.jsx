@@ -129,7 +129,6 @@ class UserPage extends Component {
             body:  JSON.stringify(this.state.user)
         })
             .then(res => {
-                console.log(res)
                 if(res.status == 204){
                     MySwal.fire({
                         onOpen: () => {
@@ -138,6 +137,15 @@ class UserPage extends Component {
                         }
                       }).then(() => {
                         return MySwal.fire(<p>Info successfully updated.</p>)
+                      })
+                }else {
+                    MySwal.fire({
+                        onOpen: () => {
+                    
+                          MySwal.clickConfirm()
+                        }
+                      }).then(() => {
+                        return MySwal.fire(<p>Sorry, Something wrong happened.</p>)
                       })
                 }
                 reactLocalStorage.setObject('userInfo',this.state.user)

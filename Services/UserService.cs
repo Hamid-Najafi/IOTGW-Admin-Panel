@@ -19,7 +19,7 @@ namespace IOTGW_Admin_Panel.Services
         IEnumerable<User> GetAll();
         User GetById(int id);
         User Create(User user, string password);
-        void Update(User user, int id, string password = null);
+        void Update(User user, string password = null);
         void Delete(int id);
     }
 
@@ -144,9 +144,9 @@ namespace IOTGW_Admin_Panel.Services
 
             return user;
         }
-        public void Update(User userParam, int id, string password = null)
+        public void Update(User userParam, string password = null)
         {
-            var user = _context.Users.Find(id);
+            var user = _context.Users.Find(userParam.Id);
 
             if (user == null)
                 throw new AppException("User not found");
@@ -172,10 +172,7 @@ namespace IOTGW_Admin_Panel.Services
                 user.Email = userParam.Email;
             }
 
-            // _context.Entry(user).State = EntityState.Modified;
-            // _context.SaveChanges();
-
-            // update user properties
+            // update user properties / cant chane Role
             if (!string.IsNullOrWhiteSpace(userParam.FirstName))
                 user.FirstName = userParam.FirstName;
 

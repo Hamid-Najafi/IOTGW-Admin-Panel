@@ -10,6 +10,10 @@ namespace IOTGW_Admin_Panel.Models
     public class Node
     {
         public int Id { get; set; }
+
+        [Required]
+        public int GatewayId { get; set; }
+
         [Required]
         [StringLength(30)]
         public string Name { get; set; }
@@ -20,6 +24,9 @@ namespace IOTGW_Admin_Panel.Models
         public string Description { get; set; }
         [Required]
         public NodeType Type { get; set; }
+
+        // Navigation propertie
+        public Gateway Gateway { get; set; }
 
     }
 }

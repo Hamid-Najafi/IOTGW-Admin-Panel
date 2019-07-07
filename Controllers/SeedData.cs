@@ -9,6 +9,8 @@ namespace IOTGW_Admin_Panel.Models
     {
         public async static void Initialize(IServiceProvider serviceProvider)
         {
+
+
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash("1234", out passwordHash, out passwordSalt);
 
@@ -67,33 +69,40 @@ namespace IOTGW_Admin_Panel.Models
                        Description = "Test Gateway 2 to test admin panel functionality"
                    }
                );
+                string WiFiConfig = System.IO.File.ReadAllText("GatewayNodesConfig/WiFi.json");
+                string ZigbeeConfig = System.IO.File.ReadAllText("GatewayNodesConfig/Zigbee.json");
+                string BluetoothConfig = System.IO.File.ReadAllText("GatewayNodesConfig/Bluetooth.json");
+                string LoRaConfig = System.IO.File.ReadAllText("GatewayNodesConfig/LoRa.json");
+                string EthernetConfig = System.IO.File.ReadAllText("GatewayNodesConfig/Ethernet.json");
+                string SIM800Config = System.IO.File.ReadAllText("GatewayNodesConfig/SIM800.json");
+
                 await _context.Nodes.AddRangeAsync(
                     new Node
                     {
                         Name = "Wifi",
                         GatewayId = 1,
-                        Config = "?",
+                        Config = WiFiConfig,
                         Description = "ESP32",
                         Type = NodeType.WiFi,
                     }, new Node
                     {
                         Name = "Zigbee",
                         GatewayId = 1,
-                        Config = "?",
+                        Config = ZigbeeConfig,
                         Description = "ZG-M1E",
                         Type = NodeType.Zigbee,
                     }, new Node
                     {
                         Name = "Bluetooth",
                         GatewayId = 2,
-                        Config = "?",
+                        Config = BluetoothConfig,
                         Description = " HC-05",
                         Type = NodeType.Bluetooth,
                     }, new Node
                     {
                         Name = "LoRa",
                         GatewayId = 2,
-                        Config = "?",
+                        Config = LoRaConfig,
                         Description = "RN2483",
                         Type = NodeType.Zigbee,
                     }

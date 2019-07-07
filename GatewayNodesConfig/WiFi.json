@@ -1,0 +1,26 @@
+{
+    "WiFi": {
+        "SSID": "FUM-IOT-Lab",
+        "Password": "12345678",
+        "Security": "WPA2",
+        "Encryption": "AES",
+        "Channel": "auto",
+        "Hidden": "false",
+        "Band": {
+            "2.4Ghz": {
+                "State": "on",
+                "Mode": "bgn"
+            },
+            "5Ghz": {
+                "State": "off",
+                "Mode": "ac"
+            }
+        },
+        "Rate": "auto",
+        "DHCP": "server",
+        "Gateway": "dhcp",
+        "IP": "dhcp",
+        "Subnetmask": "dhcp",
+        "HttpServer": "true"
+    }
+}

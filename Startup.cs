@@ -68,7 +68,10 @@ namespace IOTGW_Admin_Panel
 
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
+            var nodeConfigSection = Configuration.GetSection("NodesConfig");
+
             services.Configure<AppSettings>(appSettingsSection);
+            services.Configure<NodeConfig>(nodeConfigSection);
 
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();

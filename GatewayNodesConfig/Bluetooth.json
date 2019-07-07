@@ -1,0 +1,8 @@
+{
+    "Bluetooth": {
+        "LocalName": "HC-05",
+        "LocalPin": "1234",
+        "Security": "PIN",
+        "AutoConnnect": "false"
+    }
+}

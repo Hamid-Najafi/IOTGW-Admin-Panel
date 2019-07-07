@@ -11,8 +11,69 @@ import {
     gateway_tdArray
 } from 'variables/Variables.jsx';
 import { Link } from 'react-router-dom';
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 class gatewayList extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            gateways:[]
+        };
+    }
+    componentWillMount() {
+
+        let token  = reactLocalStorage.getObject('userInfo').token
+        
+
+        fetch("https://localhost:5001/api/Gateway" , {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
+            },
+            // body: JSON.stringify(temp)
+        })
+        .then(res => 
+            {
+                if(res.status>399 && res.status<500) {
+                    this.props.history.push('/login')
+                }
+                console.log(32)
+                return res.json()
+            })
+            .then(
+                (result) => {
+                    this.setState({
+                        gateways: result
+                    });
+
+
+                },
+            )
+    }
+
+    renderTableData() {
+        return this.state.gateways.map((gw, index) => {
+            const { id, name, description } = gw //destructuring
+            var s = "/gateways/"+ id
+            return (
+                <tr key={id}>
+                    <td>{id}</td>
+                    <td>{name}</td>
+                    <td>{description}</td>
+                    <td className="text-left">
+                        <Link to={s}>
+                            <a href={s} className="btn btn-simple btn-warning btn-icon edit">edit</a>
+                        </Link>
+                    </td>
+                </tr>
+            )
+        })
+    }
+
+
     render() {
         return (
             <div className="main-content">
@@ -39,39 +100,13 @@ class gatewayList extends Component {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {
-                                                gateway_tdArray.map((prop, key) => {
-                                                    return (
+                                        {this.renderTableData()}
 
-                                                        <tr key={key}>
-                                                            <td>
-                                                                {key + 1}
-                                                            </td>
-                                                            {
-                                                                prop.map((prop, key) => {
-                                                                    return (
-
-
-                                                                        <td key={key}>
-                                                                            {prop}
-                                                                        </td>
-
-                                                                    );
-                                                                })
-                                                            }
-                                                            <td className="text-left">
-                                                                <a className="btn btn-simple btn-warning btn-icon edit"><i className="fa fa-edit"></i></a>
-                                                            </td>
-                                                        </tr>
-
-                                                    )
-                                                })
-                                            }
                                         </tbody>
                                     </Table>
                                 }
                                 legend={
-                                    <Link to="/gateway/add" >
+                                    <Link to="/gateways/add" >
                                         <Button bsStyle="info" fill wd>
                                             Add Gateway
                                         </Button>

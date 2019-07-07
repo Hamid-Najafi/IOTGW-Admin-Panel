@@ -3,6 +3,7 @@ import {
     Table,
     Grid, Row, Col
 } from 'react-bootstrap';
+import { reactLocalStorage } from 'reactjs-localstorage';
 
 import Card from 'components/Card/Card.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
@@ -14,6 +15,79 @@ import {
 // let gatewayId = 1;
 // let addPageUrl = gatewayId + '/add/';
 class deviceList extends Component {
+
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            devices: []
+        };
+    }
+
+    componentWillMount() {
+
+        let token = reactLocalStorage.getObject('userInfo').token
+
+
+        fetch("https://localhost:5001/api/Users?token=" + token, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
+            },
+            // body: JSON.stringify(temp)
+        })
+        .then(res => 
+            {
+                if(res.status>399 && res.status<500) {
+                    this.props.history.push('/login')
+                }
+                console.log(32)
+                return res.json()
+            })
+            .then(
+                (result) => {
+                    this.setState({
+                        devices: result
+                    });
+
+
+                },
+            )
+    }
+
+    renderTableData() {
+        return this.state.devices.map((device, index) => {
+            const { id, name, serial, type, description } = device //destructuring
+            var s = id
+            var s ="/devices/" +id 
+            var t = "/devices/" +id +"/messages"
+            return (
+                <tr key={id}>
+                    <td>{id}</td>
+                    <td>{name}</td>
+                    <td>{serial}</td>
+                    <td>{type}</td>
+                    <td>{description}</td>
+
+                    <td className="text-left">
+                        <Link to={t}>
+                            <a href={t} className="btn btn-simple btn-warning btn-icon edit">messages</a>
+                        </Link>
+                    </td>
+                    <td className="text-left">
+                        <Link to={s}>
+                            <a href={s} className="btn btn-simple btn-warning btn-icon edit">edit</a>
+                        </Link>
+                    </td>
+                </tr>
+            )
+        })
+    }
+
+
     render() {
         return (
             <div className="main-content">
@@ -36,33 +110,13 @@ class deviceList extends Component {
                                                         );
                                                     })
                                                 }
+                                                <th>Messages</th>
                                                 <th>Configure</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {
-                                                devices_tdArray.map((prop, key) => {
-                                                    return (
-                                                        <tr key={key}>
-                                                            <td>
-                                                                {key + 1}
-                                                            </td>
-                                                            {
-                                                                prop.map((prop, key) => {
-                                                                    return (
-                                                                        <td key={key}>{prop}</td>
-                                                                    );
-                                                                })
-                                                            }
-                                                            <td className="text-left">
-                                                                <Link to='/device/edit'>
-                                                                    <a className="btn btn-simple btn-warning btn-icon edit"><i className="fa fa-edit"></i></a>
-                                                                </Link>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
+                                            {this.renderTableData()}
+
                                         </tbody>
                                     </Table>
 

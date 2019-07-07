@@ -28,11 +28,16 @@ class UserPage extends Component {
 
     }
     
-    
     componentDidMount() {
+
+    
         let token  = reactLocalStorage.getObject('userInfo').token;
+        console.log(token)
+        if (token== null) {
+            this.props.history.push('/login')
+        }
+
         let id = reactLocalStorage.getObject('userInfo').id;
-        console.log(id)
         fetch("https://localhost:5001/api/Users/" + id , {
             method: 'GET',
             headers: {
@@ -41,13 +46,20 @@ class UserPage extends Component {
                 Authorization: 'Bearer ' + token,
             },
         })
-            .then(res => res.json())
+            .then(res => 
+            {
+                if(res.status>399 && res.status<500) {
+                    this.props.history.push('/login')
+                }
+                console.log(32)
+                return res.json()
+            })
             .then(
                 (result) => {
+                    console.log(result)
                     this.setState({
-                        user: result.result
+                        user: result
                     });
-
                 },
             )
 
@@ -101,10 +113,8 @@ class UserPage extends Component {
     }
 
     edit() {
-        console.log(this.state.user)
         let token  = reactLocalStorage.getObject('userInfo').token
         let id = reactLocalStorage.getObject('userInfo').id;
-        console.log(token)
         fetch("https://localhost:5001/api/Users/" + id , {
             method: 'PUT',
             headers: {
@@ -112,22 +122,16 @@ class UserPage extends Component {
                         'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token,
             },
+            body:  JSON.stringify(this.state.user)
         })
             .then(res => {
-                res.json();
+                console.log(res)
+                // res.json();
             })
-            .then(
-                (result) => {
-                    // this.setState({
-                    //     user: result
-                    // });
-                    console.log(result)
-                },
-            )
-    }
+            
+        }
     
     render() {
-        console.log(this.state.user)
         return (            
             <div className="main-content">
                 <Grid fluid>
@@ -146,7 +150,7 @@ class UserPage extends Component {
                                                     bsClass: "form-control",
                                                     placeholder:"Company Name",
                                                     onChange:this.handleCompanyName,
-                                                    // value: this.state.user.companyName
+                                                    value: this.state.user.companyName
                                                 },
                                                 {
                                                     label: "Username",
@@ -154,14 +158,14 @@ class UserPage extends Component {
                                                     bsClass: "form-control",
                                                     placeholder:"Username",
                                                     onChange:this.handleUsername,
-                                                    // value: this.state.user.username,
+                                                    value: this.state.user.username,
                                                 },
                                                 {
                                                     label: "Email address",
                                                     type: "email",
                                                     bsClass: "form-control",
                                                     placeholder:"email",
-                                                    // value:  this.state.user.email,
+                                                    value:  this.state.user.email,
                                                     onChange:this.handleEmail,
                                                 }
                                             ]}
@@ -174,7 +178,7 @@ class UserPage extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder:"First name",
-                                                    // value: this.state.user.firstName,
+                                                    value: this.state.user.firstName,
                                                     onChange:this.handleFirstName,
                                                 },
                                                 {
@@ -182,7 +186,7 @@ class UserPage extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder:"Last name",    
-                                                    // value: this.state.user.lastName,
+                                                    value: this.state.user.lastName,
                                                     onChange:this.handleLastName,
 
                                                 },
@@ -191,7 +195,7 @@ class UserPage extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder:"Adress",
-                                                    // value: this.state.user.address,
+                                                    value: this.state.user.address,
                                                     onChange:this.handleAdress,
                                                 }
                                             ]}
@@ -205,7 +209,7 @@ class UserPage extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder:"City",
-                                                    // value: this.state.user.city,
+                                                    value: this.state.user.city,
                                                     onChange:this.handleCity,
 
                                                 },
@@ -214,7 +218,7 @@ class UserPage extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder:"Country",
-                                                    // value: this.state.user.country,
+                                                    value: this.state.user.country,
                                                     onChange:this.handleCountry,
                                                 },
                                                 {
@@ -222,7 +226,7 @@ class UserPage extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder:"Postal Code",
-                                                    // value: this.state.user.postalCode,
+                                                    value: this.state.user.postalCode,
                                                     onChange:this.handlePostalCode,
                                                 }
                                             ]}

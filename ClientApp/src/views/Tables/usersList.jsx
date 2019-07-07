@@ -22,18 +22,26 @@ class usersList extends Component {
     componentWillMount() {
 
         let token  = reactLocalStorage.getObject('userInfo').token
-        
+        console.log(this.state.users)
 
-        fetch("https://localhost:5001/api/Users?token="+ token , {
+        fetch("https://localhost:5001/api/Users" , {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
                         'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token,
             },
-            // body: JSON.stringify(temp)
         })
-            .then(res => res.json())
+        .then(res => 
+            {
+                if(res.status>399 && res.status<500) {
+                    this.props.history.push('/login')
+                }else {
+                    return res.json()
+                }
+                
+                
+            })
             .then(
                 (result) => {
                     this.setState({
@@ -48,14 +56,16 @@ class usersList extends Component {
     renderTableData() {
         return this.state.users.map((user, index) => {
             const { id, username, email } = user //destructuring
-            var s = id
+            var s = "users/" + id + "/edit";
             return (
                 <tr key={id}>
                     <td>{id}</td>
                     <td>{username}</td>
                     <td>{email}</td>
                     <td className="text-left">
-                        <a href={s} className="btn btn-simple btn-warning btn-icon edit">edit</a>
+                        <Link to={s}>
+                            <a href={s} className="btn btn-simple btn-warning btn-icon edit">edit</a>
+                        </Link>
                     </td>
                 </tr>
             )
@@ -95,7 +105,7 @@ class usersList extends Component {
                                     </Table>
                                 }
                                 legend={
-                                    <Link to="/users/add" >
+                                    <Link to="/pages/register-page" >
                                         <Button bsStyle="info" fill wd>
                                             Add User
                                         </Button>

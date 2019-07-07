@@ -67,7 +67,6 @@ class Sidebar extends Component {
         return bool;
     }
     render() {
-        {console.log(this.state.userInfo)}
         return (
 
             <div className="sidebar" data-color="black" data-image={image}>

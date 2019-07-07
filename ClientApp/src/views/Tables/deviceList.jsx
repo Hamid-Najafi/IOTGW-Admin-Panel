@@ -9,8 +9,8 @@ import Card from 'components/Card/Card.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 import { Link } from 'react-router-dom';
 import {
-    devices_thArray,
-    devices_tdArray
+    devices_thArray
+    
 } from 'variables/Variables.jsx';
 // let gatewayId = 1;
 // let addPageUrl = gatewayId + '/add/';
@@ -44,7 +44,6 @@ class deviceList extends Component {
                 if(res.status>399 && res.status<500) {
                     this.props.history.push('/login')
                 }
-                console.log(32)
                 return res.json()
             })
             .then(

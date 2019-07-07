@@ -16,14 +16,14 @@ const MySwal = withReactContent(Swal)
 
 
   
-class addDevice extends Component {
+class addUser extends Component {
     constructor(props) {
         super(props);
         this.vForm = this.refs.vForm;
         this.state = {
             name: null,
-            description: null,
-            type: null
+            email: null,
+            password: null
 
         }
     }
@@ -39,12 +39,11 @@ class addDevice extends Component {
         let token = reactLocalStorage.getObject('userInfo').token
 
         var temp = {
-            "name": event.target.elements.name.value,
-            "type": event.target.elements.type.value,
-            "config": "string",
-            "description": event.target.elements.description.value
+            "username": event.target.elements.name.value,
+            "email": event.target.elements.email.value,
+            "password": event.target.elements.password.value
         }
-        fetch("https://localhost:5001/api/gateway/Node", {
+        fetch("https://localhost:5001/api/Users", {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -62,7 +61,7 @@ class addDevice extends Component {
                       MySwal.clickConfirm()
                     }
                   }).then(() => {
-                    return MySwal.fire(<p>Device successfully added.</p>)
+                    return MySwal.fire(<p>User successfully added.</p>)
                   })
 
             }else {
@@ -92,13 +91,13 @@ class addDevice extends Component {
                             <Form horizontal>
                                 <Card
                                     title={
-                                        <legend>Add Device</legend>
+                                        <legend>Add User</legend>
                                     }
                                     content={
                                         <div>
                                             <FormGroup controlId="name">
                                                 <Col componentClass={ControlLabel} sm={2} smOffset={2}>
-                                                    Device Name
+                                                    User Name
                                                 </Col>
                                                 <Col sm={6}>
                                                     <FormControl
@@ -109,52 +108,36 @@ class addDevice extends Component {
                                                             this.state.name = ref
                                                         }}
                                                     />
+                                                    {this.state.type_textError}
                                                 </Col>
                                             </FormGroup>
-                                            
-                                            <FormGroup controlId="type">
-                                            <Col componentClass={ControlLabel} sm={2} smOffset={2}>
-                                                    Device Name
-                                                </Col>
-                                                <Col sm={6}>
-                                                <FormControl    
-                                                    inputRef={ (ref) => this.state.name=ref }
-                                                    componentClass="select" placeholder="Type">
-                                                    <option value="1">WiFi</option>
-                                                    <option value="2">Zigbee</option>
-                                                    <option value="3">Lora</option>
-                                                    <option value="4">Bluetooth</option>
-                                                </FormControl>
-                                                </Col>
-                                                </FormGroup>
 
-                                            {/* <FormGroup controlId="type">
+                                            <FormGroup controlId="email">
                                                 <Col componentClass={ControlLabel} sm={2} smOffset={2}>
-                                                    Device Type
+                                                    User Email
                                                 </Col>
                                                 <Col sm={6}>
                                                     <FormControl
 
-                                                        type="drowdown"
+                                                        type="email"
                                                         placeholder="type"
                                                         inputRef={(ref) => {
-                                                            this.state.type = ref
+                                                            this.state.email = ref
                                                         }}
                                                     />
                                                 </Col>
-                                            </FormGroup> */}
-                                            
-                                            <FormGroup controlId="description">
+                                            </FormGroup>
+                                            <FormGroup controlId="password">
                                                 <Col componentClass={ControlLabel} sm={2} smOffset={2}>
-                                                    Description
+                                                    Password
                                                 </Col>
                                                 <Col sm={6}>
                                                     <FormControl
 
-                                                        type="text"
-                                                        placeholder="description"
+                                                        type="password"
+                                                        placeholder="password"
                                                         inputRef={(ref) => {
-                                                            this.state.description = ref
+                                                            this.state.password = ref
                                                         }}
                                                     />
                                                 </Col>
@@ -164,7 +147,7 @@ class addDevice extends Component {
                                     }
                                     ftTextCenter
                                     legend={
-                                        <Button fill bsStyle="info" type="submit" >Add Device</Button>
+                                        <Button fill bsStyle="info" type="submit" >Add User</Button>
                                     }
                                 />
                             </Form>
@@ -177,4 +160,4 @@ class addDevice extends Component {
     }
 }
 
-export default addDevice;
+export default addUser;

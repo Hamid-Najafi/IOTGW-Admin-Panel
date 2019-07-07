@@ -8,6 +8,11 @@ import Card from 'components/Card/Card.jsx';
 
 import Button from 'elements/CustomButton/CustomButton.jsx';
 
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
+
+
 class LoginPage extends Component {
     constructor(props) {
         super(props);
@@ -35,14 +40,21 @@ class LoginPage extends Component {
             body: JSON.stringify(temp)
         }).then((response) => response.json())
         .then((responseData) => {
-            console.log(responseData)
             if (responseData.token != null) {
                 let tempd =  responseData;
-                console.log(tempd)
                 reactLocalStorage.setObject('userInfo',tempd)
                 this.props.history.push('/')
             } else {
-                console.log("user or pass is wrong")
+                MySwal.fire({
+    
+                    onOpen: () => {
+
+                      MySwal.clickConfirm()
+                    }
+                  }).then(() => {
+                    return MySwal.fire(<p>Sorry. Something wrong happened</p>)
+                  })
+
             }
         })
               
@@ -50,7 +62,10 @@ class LoginPage extends Component {
     render() {
         return (
             
-            <Grid>
+            <Grid style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'
+              }}>
                 <Row>
                     <Col md={4} sm={6} mdOffset={4} smOffset={3}>
                         <form onSubmit={(e) => this.handleSubmit(e)}>

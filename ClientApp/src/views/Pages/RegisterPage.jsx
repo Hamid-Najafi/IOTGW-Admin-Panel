@@ -5,11 +5,16 @@ import {
 } from 'react-bootstrap';
 
 import Card from 'components/Card/Card.jsx';
-import {reactLocalStorage} from 'reactjs-localstorage';
+import { reactLocalStorage } from 'reactjs-localstorage';
 
 import Button from 'elements/CustomButton/CustomButton.jsx';
 
-class RegisterPage extends Component{
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
+
+
+class RegisterPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,63 +27,145 @@ class RegisterPage extends Component{
         };
     }
     handleSubmit(event) {
-        let token  = reactLocalStorage.getObject('userInfo').token
+        let token = reactLocalStorage.getObject('userInfo').token
 
         var temp = {
             "username": event.target.elements.username.value,
             "password": event.target.elements.password.value,
             "email": event.target.elements.email.value,
             "role": "User"
-            
+
         }
         console.log(temp)
-        fetch("https://localhost:5001/api/Users",{
+        fetch("https://localhost:5001/api/Users", {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
-                        'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token,
 
             },
             body: JSON.stringify(temp)
-        }).then(res => 
-            {
-                if(res.status>399 && res.status<500) {
-                    this.props.history.push('/login')
+        }).then(res => {
+            console.log(res.status)
+
+            if (res.status > 400 && res.status < 500) {
+                // this.props.history.push('/login')
+            }else {
+                if(res.status == 201) {
+                    MySwal.fire({
+                        onOpen: () => {
+                    
+                          MySwal.clickConfirm()
+                        }
+                      }).then(() => {
+                        return MySwal.fire(<p>User successfully added.</p>)
+                      })
+    
+                }else {
+                    MySwal.fire({
+    
+                        onOpen: () => {
+    
+                          MySwal.clickConfirm()
+                        }
+                      }).then(() => {
+                        return MySwal.fire(<p>Sorry. Something wrong happened</p>)
+                      })
+    
                 }
-                console.log(32)
-                return res.json()
-            })
-        .then((responseData) => {
-            console.log(responseData)
-            if (responseData.token != null) {
-                let tempd =  responseData;
-                console.log(tempd)
-                // reactLocalStorage.setObject('userInfo',tempd)
-                // this.props.history.push('/')
-            } else {
-                // console.log("user or pass is wrong")
             }
+
+            
         })
-              
+
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log(this.state)
 
     }
-    render(){
-        return (
-            <Grid>
+    render() {
+    //     return (
+    //         <Grid>
+    //             <Row>
+    //                 <Col md={8} mdOffset={2}>
+    //                     <div className="header-text">
+    //                         <h2 style={{
+    //     textAlign:'center'
+    //   }}>Legace Gateway</h2>
+    //                         <hr />
+    //                     </div>
+    //                 </Col>
+    //                 <Col md={4} mdOffset={4}>
+                    
+                        // <form onSubmit={(e) => this.handleSubmit(e)}>
+                        //     <Card
+                        //         plain
+                        //         hidden={this.state.cardHidden}
+                        //         content={
+                        //             <div>
+                        //                 <FormGroup controlId="username">
+                        //                     <FormControl
+
+                        //                         type="text"
+                        //                         placeholder="Your User Name"
+                        //                         inputRef={(ref) => {
+                        //                             this.state.username = ref
+                        //                         }}
+                        //                     />
+                        //                 </FormGroup>
+
+
+                        //                 <FormGroup controlId="email">
+                        //                     <FormControl
+                        //                         type="email"
+                        //                         placeholder="Enter Email"
+                        //                         inputRef={(ref) => {
+                        //                             this.state.email = ref
+                        //                         }}
+                        //                     />
+                        //                 </FormGroup>
+                        //                 <FormGroup controlId="password">
+                        //                     <FormControl
+                        //                         type="password"
+                        //                         placeholder="Password"
+                        //                         inputRef={(ref) => {
+                        //                             this.state.password = ref
+                        //                         }}
+                        //                     />
+                        //                 </FormGroup>
+                        //                 <FormGroup controlId="passwordConfirm">
+                        //                     <FormControl
+                        //                         type="password"
+                        //                         placeholder="Password Confirmation"
+                        //                         inputRef={(ref) => {
+                        //                             this.state.passwordConfirm = ref
+                        //                         }}
+                        //                     />
+                        //                 </FormGroup>
+                        //             </div>
+                        //         }
+                        //         ftTextCenter
+                        //         legend={
+                        //             <Button wd fill type="submit" neutral>
+                        //                 Create Account
+                        //             </Button>
+                        //         }
+                        //     />
+                        // </form>
+    //                 </Col>
+                    
+    //             </Row>
+    //         </Grid>
+    //     );
+    return (
+        <div className="main-content">
+            <Grid fluid>
                 <Row>
-                    <Col md={8} mdOffset={2}>
-                        <div className="header-text">
-                            <h2>Legace Gateway</h2>
-                            <hr />
-                        </div>
-                    </Col>
-                    <Col md={4} mdOffset={4}>
-                        <form onSubmit={(e) => this.handleSubmit(e)}>
+
+                <Col md={4} mdOffset={4}>
+                    <form onSubmit={(e) => this.handleSubmit(e)}>
                             <Card
                                 plain
                                 hidden={this.state.cardHidden}
@@ -86,7 +173,7 @@ class RegisterPage extends Component{
                                     <div>
                                         <FormGroup controlId="username">
                                             <FormControl
-                                            
+
                                                 type="text"
                                                 placeholder="Your User Name"
                                                 inputRef={(ref) => {
@@ -94,8 +181,8 @@ class RegisterPage extends Component{
                                                 }}
                                             />
                                         </FormGroup>
-                                       
-                                        
+
+
                                         <FormGroup controlId="email">
                                             <FormControl
                                                 type="email"
@@ -136,7 +223,8 @@ class RegisterPage extends Component{
                     </Col>
                 </Row>
             </Grid>
-        );
+        </div>
+    );
     }
 }
 

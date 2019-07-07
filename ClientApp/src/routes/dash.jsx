@@ -25,12 +25,15 @@ var dashRoutes = [
         { path: "/users/all", name: "Users List", icon: "pe-7s-plus", mini: "UL",component: UsersList },
         { path: "/users/edit", name: "Edit User", icon: "pe-7s-plus", mini: "EU",component: UserPage },
         { path: "/pages/fake-data", name: "fake data", mini: "FD", component: fakeData },
+        { path: "/device/all", name: "Node List", mini: "DD", component: deviceList },
+
         { path: "/device/data", name: "device data", mini: "DD", component: deviceData },
         ]
     },
     { path: "/login", name: "Login Page", mini: "LP", component: LoginPage },
 
     { collapse: true, path: "/admin", name: "Admin", state: "openComponents3", icon: "pe-7s-plugin", views:[
+
         { path: "/devices/add", name: "Add Device", icon: "pe-7s-plus", mini: "AD",component: addDevice },
         { path: "/gateways/add", name: "Add Gateway", mini: "AG", component: addGateway },
         { path: "/users/all", name: "Users List", icon: "pe-7s-plus", mini: "UL",component: UsersList },

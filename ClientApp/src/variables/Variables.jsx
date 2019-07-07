@@ -35,7 +35,7 @@ var gatewayListInfo = [
 // // // For tables
 // //
 // device lists
-const devices_thArray = ["Name", "Serial", "Description", "Type"];
+const devices_thArray = ["Name", "Type", "Description"];
 const devices_tdArray = [
     ["bluetooth Node", "GHF43543HDF", "Description text", "Device type"],
     ["Wifi node", "HT45ITY5", "Description text", "Device type"],

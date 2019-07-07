@@ -30,7 +30,7 @@ class deviceList extends Component {
         let token = reactLocalStorage.getObject('userInfo').token
 
 
-        fetch("https://localhost:5001/api/Users?token=" + token, {
+        fetch("https://localhost:5001/api/gateway/Node?token=" + token, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -60,7 +60,7 @@ class deviceList extends Component {
 
     renderTableData() {
         return this.state.devices.map((device, index) => {
-            const { id, name, serial, type, description } = device //destructuring
+            const { id, name, type, description } = device //destructuring
             var s = id
             var s ="/devices/" +id 
             var t = "/devices/" +id +"/messages"
@@ -68,7 +68,6 @@ class deviceList extends Component {
                 <tr key={id}>
                     <td>{id}</td>
                     <td>{name}</td>
-                    <td>{serial}</td>
                     <td>{type}</td>
                     <td>{description}</td>
 
@@ -79,7 +78,7 @@ class deviceList extends Component {
                     </td>
                     <td className="text-left">
                         <Link to={s}>
-                            <a href={s} className="btn btn-simple btn-warning btn-icon edit">edit</a>
+                            <a href={s} className="btn btn-simple btn-warning btn-icon edit">config</a>
                         </Link>
                     </td>
                 </tr>
@@ -125,7 +124,7 @@ class deviceList extends Component {
                                 legend={
 
 
-                                    <Link to='/device/add'>
+                                    <Link to='/devices/add'>
                                         <Button bsStyle="info" fill wd>
                                             Add Device
                                         </Button>

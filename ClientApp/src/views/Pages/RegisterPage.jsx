@@ -29,7 +29,7 @@ class RegisterPage extends Component{
             "password": event.target.elements.password.value,
             "email": event.target.elements.email.value,
             "role": "User"
-
+            
         }
         console.log(temp)
         fetch("https://localhost:5001/api/Users",{

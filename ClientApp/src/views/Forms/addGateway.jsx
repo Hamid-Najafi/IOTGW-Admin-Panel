@@ -45,7 +45,7 @@ class addGateway extends Component {
             body: JSON.stringify(temp)
         }).then((response) => {
             console.log(response)
-            if(response.status ==201){
+            if(response.status ===201){
                 response.json()
                 MySwal.fire({
                     onOpen: () => {

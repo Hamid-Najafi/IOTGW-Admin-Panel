@@ -3,43 +3,43 @@ import {
     Table,
     Grid, Row, Col
 } from 'react-bootstrap';
-import {reactLocalStorage} from 'reactjs-localstorage';
+import { reactLocalStorage } from 'reactjs-localstorage';
 
 import Card from 'components/Card/Card.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 import {
-    users_thArray} from 'variables/Variables.jsx';
+    users_thArray
+} from 'variables/Variables.jsx';
 import { Link } from 'react-router-dom';
 
 class usersList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            users:[]
+            users: []
         };
     }
 
     componentWillMount() {
 
-        let token  = reactLocalStorage.getObject('userInfo').token
+        let token = reactLocalStorage.getObject('userInfo').token
 
-        fetch("https://localhost:5001/api/Users" , {
+        fetch("https://localhost:5001/api/Users", {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
-                        'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + token,
             },
         })
-        .then(res => 
-            {
-                if(res.status>399 && res.status<500) {
+            .then(res => {
+                if (res.status > 399 && res.status < 500) {
                     this.props.history.push('/login')
-                }else {
+                } else {
                     return res.json()
                 }
-                
-                
+
+
             })
             .then(
                 (result) => {
@@ -55,15 +55,18 @@ class usersList extends Component {
     renderTableData() {
         return this.state.users.map((user, index) => {
             const { id, username, email } = user //destructuring
-            var s = "users/" + id + "/edit";
+            let idT = id;
             return (
                 <tr key={id}>
                     <td>{id}</td>
                     <td>{username}</td>
                     <td>{email}</td>
                     <td className="text-left">
-                        <Link to={s}>
-                            <a href={s} className="btn btn-simple btn-warning btn-icon edit">edit</a>
+                        {/* <a  onClick={alert('alert')}>
+                            edit
+                        </a> */}
+                        <Link to={{ pathname: '/users/edit', state: { id: idT} }}>
+                            <a className="btn btn-simple btn-warning btn-icon edit">edit</a>
                         </Link>
                     </td>
                 </tr>
@@ -72,7 +75,6 @@ class usersList extends Component {
     }
 
     render() {
-        console.log(this.state.users)
 
         return (
             <div className="main-content">

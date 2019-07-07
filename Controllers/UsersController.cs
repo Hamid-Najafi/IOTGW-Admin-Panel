@@ -50,13 +50,14 @@ namespace IOTGW_Admin_Panel.Controllers
         /// </summary>
         [HttpGet]
         [Authorize(Roles = Role.Admin)]
+        [Produces("application/json")]
         public ActionResult<IEnumerable<User>> GetAll()
         {
             try
             {
                 var users = _userService.GetAll();
-                var userDtos = _mapper.Map<IList<User>>(users);
-                return Ok(userDtos);
+                var userMap = _mapper.Map<IList<User>>(users);
+                return Ok(userMap);
             }
             catch (AppException ex)
             {
@@ -70,6 +71,7 @@ namespace IOTGW_Admin_Panel.Controllers
         /// </summary>
         /// <param id="Id"></param> 
         [HttpGet("{id}")]
+        [Produces("application/json")]
         public ActionResult<User> GetById(int id)
         {
             //var userMap = _mapper.Map<User>(user);
@@ -82,8 +84,8 @@ namespace IOTGW_Admin_Panel.Controllers
             try
             {
                 var user = _userService.GetById(id);
-                var userDto = _mapper.Map<User>(user);
-                return Ok(userDto);
+                var userMap = _mapper.Map<User>(user);
+                return Ok(userMap);
             }
             catch (AppException ex)
             {
@@ -99,9 +101,9 @@ namespace IOTGW_Admin_Panel.Controllers
         [Authorize(Roles = Role.Admin)]
         //[HttpPost("register")]
         [HttpPost]
+        [Produces("application/json")]
         public IActionResult Register(User userParam)
         {
-            // map dto to entity
             var userMap = _mapper.Map<User>(userParam);
             try
             {
@@ -130,14 +132,13 @@ namespace IOTGW_Admin_Panel.Controllers
             if (id != currentUserId && !User.IsInRole(Role.Admin))
                 return Forbid();
 
-            // map dto to entity and set id
             var userMap = _mapper.Map<User>(userParam);
-            // userParam.Id = id;
+            userMap.Id = id;
 
             try
             {
                 // save 
-                _userService.Update(userMap, id, userMap.Password);
+                _userService.Update(userMap, userMap.Password);
                 return NoContent();
                 //return Ok();
             }
@@ -175,7 +176,7 @@ namespace IOTGW_Admin_Panel.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
             }
         }
     }

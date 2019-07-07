@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IOTGW_Admin_Panel.Models
 {
@@ -36,15 +37,14 @@ namespace IOTGW_Admin_Panel.Models
         public string LastName { get; set; }
 
         [Display(Name = "Full Name")]
+        [ForeignKey("FullName")]
+
         public string FullName
         {
-            get
-            {
-                return LastName + ", " + FirstName;
-            }
+            get => LastName + ", " + FirstName;
         }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Enrollment Date")]
         public DateTime EnrollmentDate { get; set; }
 
@@ -59,6 +59,7 @@ namespace IOTGW_Admin_Panel.Models
 
         public string CompanyName { get; set; }
 
+        // Navigation propertie
         public ICollection<Gateway> Gateways { get; set; }
 
     }

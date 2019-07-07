@@ -16,40 +16,58 @@ namespace IOTGW_Admin_Panel.Models
                 serviceProvider.GetRequiredService<
                 DbContextOptions<DataBaseContext>>()))
             {
-                if (_context.Users.Any())
+                //await _context.Database.EnsureCreatedAsync();
+
+                if (await _context.Users.AnyAsync())
                 {
                     return;
                 }
                 await _context.Users.AddRangeAsync(
-                new User
-                {
-                    Username = "Hamid",
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt,
-                    FirstName = "Hamid",
-                    LastName = "Najafi",
-                    //FullName = "Hamid Najafi",
-                    Email = "Hamid.Najafi@email.com",
-                    Address = "Ferdowsi Campus",
-                    City = "Mashhad",
-                    EnrollmentDate = DateTime.Now,
-                    Role = Role.Admin
-                },
-                new User
-                {
-                    Username = "Shahla",
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt,
-                    FirstName = "Shahla",
-                    LastName = "Vaziri",
-                    //FullName = "Shahla Vaziri",
-                    Email = "vaziri.shahla24@gmail.com",
-                    Address = "Ferdowsi Campus",
-                    City = "Mashhad",
-                    EnrollmentDate = DateTime.Now,
-                    Role = Role.User
-                }
-              );
+               new User
+               {
+                   Username = "Hamid",
+                   PasswordHash = passwordHash,
+                   PasswordSalt = passwordSalt,
+                   FirstName = "Hamid",
+                   LastName = "Najafi",
+                   //FullName = "Hamid Najafi",
+                   Email = "Hamid.Najafi@email.com",
+                   Address = "Ferdowsi Campus",
+                   City = "Mashhad",
+                   EnrollmentDate = DateTime.Now,
+                   Role = Role.Admin
+               },
+               new User
+               {
+                   Username = "Shahla",
+                   PasswordHash = passwordHash,
+                   PasswordSalt = passwordSalt,
+                   FirstName = "Shahla",
+                   LastName = "Vaziri",
+                   //FullName = "Shahla Vaziri",
+                   Email = "vaziri.shahla24@gmail.com",
+                   Address = "Ferdowsi Campus",
+                   City = "Mashhad",
+                   EnrollmentDate = DateTime.Now,
+                   Role = Role.User
+               }
+             );
+
+                await _context.Gateways.AddRangeAsync(
+                   new Gateway
+                   {
+                       UserId = 2,
+                       Name = "IOT-Lab-Gateway-1",
+                       Description = "Test Gateway to test admin panel functionality"
+                   },
+                   new Gateway
+                   {
+                       UserId = 2,
+                       Name = "IOT-Lab-Gateway-2",
+                       Description = "Test Gateway 2 to test admin panel functionality"
+                   }
+               );
+
                 await _context.SaveChangesAsync();
             }
         }

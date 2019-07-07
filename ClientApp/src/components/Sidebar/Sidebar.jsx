@@ -13,16 +13,15 @@ import image from 'assets/img/full-screen-image-3.jpg';
 import avatar from 'assets/img/default-avatar.png';
 // logo for sidebar
 import logo from "logo.svg";
-import { userInfo } from 'variables/Variables.jsx';
 
 import dashRoutes from 'routes/dash.jsx';
-
+import { reactLocalStorage } from 'reactjs-localstorage';
 const bgImage = { backgroundImage: "url(" + image + ")" };
-
 class Sidebar extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            userInfo:[],
             openAvatar: false,
             openComponents: (this.activeRoute("/components") !== '' ? true : false),
             openForms: (this.activeRoute("/forms") !== '' ? true : false),
@@ -32,6 +31,7 @@ class Sidebar extends Component {
             isWindows: (navigator.platform.indexOf('Win') > -1 ? true : false),
             width: window.innerWidth
         }
+
     }
     // verifies if routeName is the one active (in browser input)
     activeRoute(routeName) {
@@ -43,12 +43,15 @@ class Sidebar extends Component {
         this.setState({ width: window.innerWidth });
     }
     componentDidMount() {
+        let user = reactLocalStorage.getObject('userInfo')
+        this.setState({userInfo:user})
         this.updateDimensions();
         // add event listener for windows resize
         window.addEventListener("resize", this.updateDimensions.bind(this));
         if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
             Ps.initialize(this.refs.sidebarWrapper, { wheelSpeed: 2, suppressScrollX: true });
         }
+
     }
     componentDidUpdate() {
         if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
@@ -64,6 +67,7 @@ class Sidebar extends Component {
         return bool;
     }
     render() {
+        {console.log(this.state.userInfo)}
         return (
 
             <div className="sidebar" data-color="black" data-image={image}>
@@ -86,7 +90,7 @@ class Sidebar extends Component {
                         <div className="info">
                             <a onClick={() => this.setState({ openAvatar: !this.state.openAvatar })}>
                                 <span>
-                                    {userInfo.firstName + " " + userInfo.lastName}
+                                    {this.state.userInfo.firstName + " " + this.state.userInfo.lastName}
                                     <b className={this.state.openAvatar ? "caret rotate-180" : "caret"}></b>
                                 </span>
                             </a>

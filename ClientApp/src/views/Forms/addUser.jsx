@@ -23,10 +23,17 @@ class addUser extends Component {
         this.state = {
             name: null,
             email: null,
-            password: null
+            password: null,
+            id:null
 
         }
     }
+    componentWillRecieveProps(nextProps){
+        this.setState({
+         editUserUd:nextProps["id"]
+         });
+    
+        }
     componentDidMount(){
         let user  = reactLocalStorage.getObject('userInfo')
 

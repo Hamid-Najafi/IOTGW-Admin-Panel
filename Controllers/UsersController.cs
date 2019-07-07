@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using IOTGW_Admin_Panel.Helpers;
 using AutoMapper;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace IOTGW_Admin_Panel.Controllers
 {
@@ -176,7 +177,7 @@ namespace IOTGW_Admin_Panel.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

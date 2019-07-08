@@ -102,6 +102,9 @@ namespace IOTGW_Admin_Panel.Controllers
         [Produces("application/json")]
         public ActionResult<IEnumerable<NodeDto>> GetGatewaysForUser(int userId)
         {
+            var currentUserId = int.Parse(User.Identity.Name);
+            if (userId != currentUserId && !User.IsInRole(Role.Admin))
+                return Forbid();
             try
             {
                 var gateways = _userService.GetGatewaysForUser(userId);

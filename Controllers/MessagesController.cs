@@ -7,6 +7,8 @@ using IOTGW_Admin_Panel.Models;
 using IOTGW_Admin_Panel.Services;
 using IOTGW_Admin_Panel.Helpers;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace IOTGW_Admin_Panel.Controllers
 {
@@ -59,12 +61,12 @@ namespace IOTGW_Admin_Panel.Controllers
 
             try
             {
-                var message = _messageService.GetById(id);
-
+                var message = _messageService.ClaimCheck(id);
                 if (message.Node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
                     return Forbid();
 
-                var messageMap = _mapper.Map<Message>(message);
+                var message2 = _messageService.GetById(id);
+                var messageMap = _mapper.Map<Message>(message2);
                 return Ok(messageMap);
             }
             catch (AppException ex)
@@ -78,15 +80,21 @@ namespace IOTGW_Admin_Panel.Controllers
         /// Ctreate new message.
         /// </summary>
         /// <param message="message Item"></param> 
-        [Authorize(Roles = Role.Admin)]
         //[HttpPost("register")]
         [HttpPost]
         [Produces("application/json")]
         public IActionResult Create(Message messageParam)
         {
+            var currentUserId = int.Parse(User.Identity.Name);
+
             var messageMap = _mapper.Map<Message>(messageParam);
+
             try
             {
+                // Fobid Check
+                // var message = _messageService.NodeClaimCheck(messageParam.NodeId);
+                // if (message.Node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                //     return Forbid();
                 _messageService.Create(messageMap);
                 return CreatedAtAction(nameof(GetById), new { id = messageMap.Id }, messageMap);
                 //return Ok();
@@ -95,6 +103,7 @@ namespace IOTGW_Admin_Panel.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            return null;
         }
 
         /// <summary>
@@ -102,11 +111,16 @@ namespace IOTGW_Admin_Panel.Controllers
         /// </summary>
         /// <param name="id"></param>   
         [HttpDelete("{id}")]
-        [Authorize(Roles = Role.Admin)]
         public IActionResult Deletemessage(int id)
         {
+            var currentUserId = int.Parse(User.Identity.Name);
+
             try
             {
+                var message = _messageService.ClaimCheck(id);
+                if (message.Node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                    return Forbid();
+
                 _messageService.Delete(id);
                 return NoContent();
                 //return Ok();

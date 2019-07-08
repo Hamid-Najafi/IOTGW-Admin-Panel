@@ -17,6 +17,7 @@ namespace IOTGW_Admin_Panel.Services
         Node Create(Node node);
         void Update(Node node);
         void Delete(int id);
+        Node ClaimCheck(int id);
     }
 
     public class NodeService : INodeService
@@ -50,7 +51,7 @@ namespace IOTGW_Admin_Panel.Services
             };
         public Node GetById(int id)
         {
-            var node = _context.Nodes.Find(id);
+            var node = _context.Nodes.AsNoTracking().FirstOrDefault(n => n.Id == id);
 
             if (node == null)
                 throw new AppException("Node not found");
@@ -71,7 +72,6 @@ namespace IOTGW_Admin_Panel.Services
         }
         public Node Create(Node node)
         {
-
             if (_context.Nodes.Any(x => x.Name == node.Name))
                 throw new AppException("Node Name '" + node.Name + "' is already taken");
 
@@ -92,7 +92,7 @@ namespace IOTGW_Admin_Panel.Services
                 throw new AppException("Node Params are null");
             }
             //get currect node in db
-            var node = _context.Nodes.Find(nodeParam.Id);
+            var node = _context.Nodes.AsNoTracking().FirstOrDefault(n => n.Id == nodeParam.Id);
 
             if (node == null)
                 throw new AppException("Node not found");
@@ -121,7 +121,7 @@ namespace IOTGW_Admin_Panel.Services
         }
         public void Delete(int id)
         {
-            var node = _context.Nodes.Find(id);
+            var node = _context.Nodes.AsNoTracking().FirstOrDefault(n => n.Id == id);
 
             if (node == null)
                 throw new AppException("Node not found");
@@ -131,6 +131,13 @@ namespace IOTGW_Admin_Panel.Services
                 _context.Nodes.Remove(node);
                 _context.SaveChanges();
             }
+        }
+        public Node ClaimCheck(int id)
+        {
+            var node = _context.Nodes.Include(n => n.Gateway).FirstOrDefault(n => n.Id == id);
+            if (node == null)
+                throw new AppException("Node not found");
+            return node;
         }
 
     }

@@ -82,8 +82,15 @@ namespace IOTGW_Admin_Panel.Controllers
         [Produces("application/json")]
         public ActionResult<IEnumerable<NodeDto>> GetNodesForGateway(int gatewayId)
         {
+            var currentUserId = int.Parse(User.Identity.Name);
+
             try
             {
+                var gateway = _gatewayService.GetById(gatewayId);
+
+                if (gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                    return Forbid();
+
                 var nodes = _gatewayService.GetNodesForGateway(gatewayId);
                 var nodeDtoMap = _mapper.Map<IList<NodeDto>>(nodes);
                 return Ok(nodeDtoMap);
@@ -92,7 +99,6 @@ namespace IOTGW_Admin_Panel.Controllers
             {
                 return NotFound(ex.Message);
             }
-
         }
 
         /// <summary>

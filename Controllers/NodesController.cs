@@ -59,14 +59,12 @@ namespace IOTGW_Admin_Panel.Controllers
 
             try
             {
-                var node = _nodeService.GetById(id);
-                // if (node.Gateway.UserId != currentUserId)
-                //     return Forbid();
+                var node = _nodeService.ClaimCheck(id);
+                if (node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                    return Forbid();
 
-                //if (!User.IsInRole(Role.Admin))
-                  //  return Forbid();
-
-                var nodeMap = _mapper.Map<Node>(node);
+                var node2 = _nodeService.GetById(id);
+                var nodeMap = _mapper.Map<Node>(node2);
                 return Ok(nodeMap);
             }
             catch (AppException ex)
@@ -82,10 +80,16 @@ namespace IOTGW_Admin_Panel.Controllers
         [HttpGet]
         [Route("{nodeId:int}/messages")]
         [Produces("application/json")]
-        public ActionResult<IEnumerable<NodeDto>> GetNodesForGateway(int nodeId)
+        public ActionResult<IEnumerable<NodeDto>> GetMessagesForNode(int nodeId)
         {
+            var currentUserId = int.Parse(User.Identity.Name);
+
             try
             {
+                var node = _nodeService.ClaimCheck(nodeId);
+                if (node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                    return Forbid();
+
                 var messages = _nodeService.GetMessagesForNode(nodeId);
                 var messagesDtoMap = _mapper.Map<IList<MessageDto>>(messages);
                 return Ok(messagesDtoMap);
@@ -128,18 +132,19 @@ namespace IOTGW_Admin_Panel.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, Node nodeParam)
         {
+
             //only allow admins to access other node records
             var currentUserId = int.Parse(User.Identity.Name);
-
-            // if (nodeParam.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
-            //     return Forbid();
 
             var nodeMap = _mapper.Map<Node>(nodeParam);
             nodeMap.Id = id;
 
             try
             {
-                // save 
+                var node = _nodeService.ClaimCheck(id);
+                if (node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                    return Forbid();
+
                 _nodeService.Update(nodeMap);
                 return NoContent();
                 //return Ok();
@@ -159,8 +164,12 @@ namespace IOTGW_Admin_Panel.Controllers
         [Authorize(Roles = Role.Admin)]
         public IActionResult Delete(int id)
         {
+            var currentUserId = int.Parse(User.Identity.Name);
+
             try
             {
+                var node = _nodeService.GetById(id);
+
                 _nodeService.Delete(id);
                 return NoContent();
                 //return Ok();

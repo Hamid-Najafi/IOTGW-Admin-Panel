@@ -53,7 +53,8 @@ namespace IOTGW_Admin_Panel.Services
 
         public void Delete(int id)
         {
-            var message = _context.Messages.AsNoTracking().FirstOrDefault(m => m.Id == id);
+            //var message = _context.Messages.AsNoTracking().FirstOrDefault(m => m.Id == id);
+            var message = _context.Messages.Find(id);
 
             if (message == null)
                 throw new AppException("Message not found");

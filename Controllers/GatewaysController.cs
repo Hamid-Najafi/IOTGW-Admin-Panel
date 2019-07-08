@@ -75,6 +75,27 @@ namespace IOTGW_Admin_Panel.Controllers
         }
 
         /// <summary>
+        /// gets nodes list for a gateway.
+        /// </summary>
+        [HttpGet]
+        [Route("{gatewayId:int}/nodes")]
+        [Produces("application/json")]
+        public ActionResult<IEnumerable<NodeDto>> GetNodesForGateway(int gatewayId)
+        {
+            try
+            {
+                var nodes = _gatewayService.GetNodesForGateway(gatewayId);
+                var nodeDtoMap = _mapper.Map<IList<NodeDto>>(nodes);
+                return Ok(nodeDtoMap);
+            }
+            catch (AppException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+
+        /// <summary>
         /// Ctreate new gateway.
         /// </summary>
         /// <param gateway="gateway Item"></param> 
@@ -149,7 +170,7 @@ namespace IOTGW_Admin_Panel.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,e);
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
             }
         }
 

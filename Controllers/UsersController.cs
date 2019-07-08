@@ -95,6 +95,27 @@ namespace IOTGW_Admin_Panel.Controllers
         }
 
         /// <summary>
+        /// gets gateways list for a user.
+        /// </summary>
+        [HttpGet]
+        [Route("{userId:int}/gateways")]
+        [Produces("application/json")]
+        public ActionResult<IEnumerable<NodeDto>> GetGatewaysForUser(int userId)
+        {
+            try
+            {
+                var gateways = _userService.GetGatewaysForUser(userId);
+                var gatewaysDtoMap = _mapper.Map<IList<GatewayDto>>(gateways);
+                return Ok(gatewaysDtoMap);
+            }
+            catch (AppException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+
+        /// <summary>
         /// Ctreate new User.
         /// </summary>
         /// <param user="User Item"></param> 

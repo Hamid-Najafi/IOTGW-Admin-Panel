@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IOTGW_Admin_Panel.Models
 {
@@ -16,7 +17,6 @@ namespace IOTGW_Admin_Panel.Models
     {
         public int Id { get; set; }
 
-        //[ForeignKey("GatewayId")]
         [Required]
         public int GatewayId { get; set; }
 
@@ -32,6 +32,7 @@ namespace IOTGW_Admin_Panel.Models
         public string Type { get; set; }
 
         // Navigation propertie
+        //[ForeignKey("GatewayId")]
         public Gateway Gateway { get; set; }
         public ICollection<Message> Messages { get; set; }
 

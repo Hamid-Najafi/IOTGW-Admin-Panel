@@ -8,6 +8,10 @@ namespace IOTGW_Admin_Panel.Models
     {
         public int Id { get; set; }
 
+        [Required]
+        public string Title { get; set; }
+
+        [Required]
         public int NodeId { get; set; }
 
         [Required]
@@ -25,6 +29,7 @@ namespace IOTGW_Admin_Panel.Models
             RecievedDateTime = DateTime.Now;
         }
 
+        //[ForeignKey("NodeId")]
         public Node Node { get; set; }
 
     }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using IOTGW_Admin_Panel.Helpers;
 using IOTGW_Admin_Panel.Models;
+using System.Linq.Expressions;
+using System;
 
 namespace IOTGW_Admin_Panel.Services
 {
@@ -11,6 +13,7 @@ namespace IOTGW_Admin_Panel.Services
         // Dont use Task<> Cause cant catch : throw new AppException
         IEnumerable<Node> GetAll();
         Node GetById(int id);
+        IEnumerable<MessageDto> GetMessagesForNode(int id);
         Node Create(Node node);
         void Update(Node node);
         void Delete(int id);
@@ -18,6 +21,7 @@ namespace IOTGW_Admin_Panel.Services
 
     public class NodeService : INodeService
     {
+
         private readonly DataBaseContext _context;
 
         public NodeService(DataBaseContext context)
@@ -33,6 +37,17 @@ namespace IOTGW_Admin_Panel.Services
             return _context.Nodes.ToList();
 
         }
+        // Typed lambda expression for Select() method. 
+        private static readonly Expression<Func<Message, MessageDto>> AsMessageDto =
+            x => new MessageDto
+            {
+                Id = x.Id,
+                Title = x.Title,
+                NodeName = x.Node.Name,
+                SourceNode = x.SourceNode,
+                RecievedDateTime = x.RecievedDateTime,
+                Data = x.Data
+            };
         public Node GetById(int id)
         {
             var node = _context.Nodes.Find(id);
@@ -41,6 +56,18 @@ namespace IOTGW_Admin_Panel.Services
                 throw new AppException("Node not found");
 
             return node;
+        }
+        public IEnumerable<MessageDto> GetMessagesForNode(int id)
+        {
+            var messages = _context.Messages.Include(n => n.Node)
+            .Where(n => n.NodeId == id)
+            .Select(AsMessageDto).ToList();
+
+            if (messages == null)
+                throw new AppException("Node doesnt have any messages");
+
+            return messages;
+
         }
         public Node Create(Node node)
         {

@@ -1,3 +1,5 @@
+using System;
+using System.Linq.Expressions;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +13,7 @@ namespace IOTGW_Admin_Panel.Services
         // Dont use Task<> Cause cant catch : throw new AppException
         IEnumerable<Gateway> GetAll();
         Gateway GetById(int id);
+        IEnumerable<NodeDto> GetNodesForGateway(int id);
         Gateway Create(Gateway gateway);
         void Update(Gateway gateway);
         void Delete(int id);
@@ -18,6 +21,7 @@ namespace IOTGW_Admin_Panel.Services
 
     public class GatewayService : IGatewayService
     {
+
         private readonly DataBaseContext _context;
 
         public GatewayService(DataBaseContext context)
@@ -31,6 +35,18 @@ namespace IOTGW_Admin_Panel.Services
             //return _context.Gateways.Include(x => x.User).ToList();
             return _context.Gateways.ToList();
         }
+        // Typed lambda expression for Select() method. 
+        private static readonly Expression<Func<Node, NodeDto>> AsNodeDto =
+            x => new NodeDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                GatewayId = x.GatewayId,
+                GatewayName = x.Gateway.Name,
+                Config = x.Config,
+                Description = x.Description,
+                Type = x.Type
+            };
         public Gateway GetById(int id)
         {
             var gateway = _context.Gateways.Find(id);
@@ -39,6 +55,18 @@ namespace IOTGW_Admin_Panel.Services
                 throw new AppException("Gateway not found");
 
             return gateway;
+        }
+        public IEnumerable<NodeDto> GetNodesForGateway(int id)
+        {
+            var nodes = _context.Nodes.Include(n => n.Gateway)
+            .Where(n => n.GatewayId == id)
+            .Select(AsNodeDto).ToList();
+
+            if (nodes == null)
+                throw new AppException("Gateway doesnt have any node");
+
+            return nodes;
+
         }
         public Gateway Create(Gateway gateway)
         {

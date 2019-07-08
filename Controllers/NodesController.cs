@@ -75,6 +75,27 @@ namespace IOTGW_Admin_Panel.Controllers
         }
 
         /// <summary>
+        /// gets messages list for a node.
+        /// </summary>
+        [HttpGet]
+        [Route("{nodeId:int}/messages")]
+        [Produces("application/json")]
+        public ActionResult<IEnumerable<NodeDto>> GetNodesForGateway(int nodeId)
+        {
+            try
+            {
+                var messages = _nodeService.GetMessagesForNode(nodeId);
+                var messagesDtoMap = _mapper.Map<IList<MessageDto>>(messages);
+                return Ok(messagesDtoMap);
+            }
+            catch (AppException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+
+        /// <summary>
         /// Ctreate new node.
         /// </summary>
         /// <param node="node Item"></param> 

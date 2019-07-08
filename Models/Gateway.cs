@@ -20,7 +20,7 @@ namespace IOTGW_Admin_Panel.Models
 
         // Navigation propertie
 
-        //[ForeignKey("UserId")]
+        [ForeignKey("UserId")]
         public User User { get; set; }
         public ICollection<Node> Nodes { get; set; }
 

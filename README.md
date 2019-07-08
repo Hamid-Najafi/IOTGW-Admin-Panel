@@ -22,7 +22,7 @@ $ git clone https://github.com/Goldenstarc/IOTGW-Admin-Panel.git IOTGW-Admin-Pan
 $ cd IOTGW-Admin-Panel
 
 # go into app's directory
-$ cd ClientSide
+$ cd ClientApp
 
 # install app's dependencies
 $ npm install

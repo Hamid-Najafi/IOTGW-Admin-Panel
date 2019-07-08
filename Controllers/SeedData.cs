@@ -18,7 +18,7 @@ namespace IOTGW_Admin_Panel.Models
                 serviceProvider.GetRequiredService<
                 DbContextOptions<DataBaseContext>>()))
             {
-                //await _context.Database.EnsureCreatedAsync();
+                await _context.Database.EnsureCreatedAsync();
 
                 if (await _context.Users.AnyAsync())
                 {

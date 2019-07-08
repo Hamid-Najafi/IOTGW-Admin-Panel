@@ -32,7 +32,7 @@ namespace IOTGW_Admin_Panel.Models
         public string Type { get; set; }
 
         // Navigation propertie
-        //[ForeignKey("GatewayId")]
+        [ForeignKey("GatewayId")]
         public Gateway Gateway { get; set; }
         public ICollection<Message> Messages { get; set; }
 

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IOTGW_Admin_Panel.Models
 {
@@ -29,7 +30,7 @@ namespace IOTGW_Admin_Panel.Models
             RecievedDateTime = DateTime.Now;
         }
 
-        //[ForeignKey("NodeId")]
+        [ForeignKey("NodeId")]
         public Node Node { get; set; }
 
     }

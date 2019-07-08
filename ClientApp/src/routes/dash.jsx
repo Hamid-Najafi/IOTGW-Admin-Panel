@@ -6,6 +6,7 @@ import gatewayList from 'views/Tables/gatewayList.jsx';
 import addGateway from '../views/Forms/addGateway.jsx';
 import addDevice from '../views/Forms/addDevice.jsx';
 import addUser from '../views/Forms/addUser.jsx';
+
 import { reactLocalStorage } from 'reactjs-localstorage';
 
 import editDevice from '../views/Forms/editDevice.jsx';
@@ -14,12 +15,11 @@ import UsersList from '../views/Tables/usersList.jsx';
 import LoginPage from 'views/Pages/LoginPage.jsx';
 import messages from 'views/Pages/messages.jsx';
 import deviceData from 'views/Pages/deviceData.jsx';
-import editUser from '../views/Pages/editUser.jsx';
 import userPage from '../views/Pages/UserPage.jsx';
 
 let user = reactLocalStorage.getObject('userInfo')
-console.log(user)
 
+if(user != undefined) {
 if (user.role == "Admin") {
     console.log(user.role == "Admin")
     var dashRoutes = [
@@ -70,7 +70,14 @@ if (user.role == "Admin") {
     ];
 
 }
+}else {
+    var dashRoutes = [
+       
+        { path: "/login", name: "Login Page", mini: "LP", component: LoginPage },
 
+    
+    ];
+}
 
 
 export default dashRoutes;

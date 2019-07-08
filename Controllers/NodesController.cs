@@ -61,8 +61,8 @@ namespace IOTGW_Admin_Panel.Controllers
             {
                 var node = _nodeService.GetById(id);
 
-                if (node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
-                    return Forbid();
+                // if (node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                //     return Forbid();
 
                 var nodeMap = _mapper.Map<Node>(node);
                 return Ok(nodeMap);
@@ -108,8 +108,8 @@ namespace IOTGW_Admin_Panel.Controllers
             //only allow admins to access other node records
             var currentUserId = int.Parse(User.Identity.Name);
 
-            if (nodeParam.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
-                return Forbid();
+            // if (nodeParam.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+            //     return Forbid();
 
             var nodeMap = _mapper.Map<Node>(nodeParam);
             nodeMap.Id = id;

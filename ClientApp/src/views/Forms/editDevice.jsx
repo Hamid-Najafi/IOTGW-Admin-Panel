@@ -5,24 +5,130 @@ import {
 } from 'react-bootstrap';
 
 import Card from 'components/Card/Card.jsx';
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 import Button from 'elements/CustomButton/CustomButton.jsx';
-import Radio from 'elements/CustomRadio/CustomRadio.jsx';
+
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 
 class editDevice extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            radio: "1",
-            radioVariant: "1"
+            device:{"name":"","description":"", "type":"", "config":""}
         };
+        this.handleConfig = this.handleConfig.bind(this)
+        this.handleName = this.handleName.bind(this)
+        this.handleDescription = this.handleDescription.bind(this)
+        this.edit = this.edit.bind(this)
+
     }
-    handleRadio = event => {
-        const target = event.target;
-        this.setState({
-            [target.name]: target.value
-        });
-    };
+    componentDidMount() {
+
+    
+        let token  = reactLocalStorage.getObject('userInfo').token;
+        if (token== null) {
+            this.props.history.push('/login')
+        }
+
+        if (this.props.location.state === undefined) this.props.history.push('/nodes')
+        else {
+            var targetId =this.props.location.state.id;
+            console.log(targetId)
+            fetch("https://localhost:5001/api/Nodes/" + targetId , {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
+            },
+        })
+            .then(res => 
+            {
+                console.log(res)
+                if(res.status>399 && res.status<500) {
+                    this.props.history.push('/login')
+                }
+                return res.json()
+            })
+            .then(
+                (result) => {
+                    this.setState({
+                        device: result
+                    });
+
+                },
+            )
+        }
+        
+
+
+    }
+    handleName(event){
+        let d = this.state.device;
+        d.name = event.target.value
+        this.setState({device: d});
+    }
+    handleDescription(event){
+        let d = this.state.device;
+        d.description = event.target.value
+        this.setState({device: d});
+    } 
+    handleConfig(event) {
+        console.log(this.state.device.config)
+        let d = this.state.device;
+        d.config = event.target.value
+        console.log(d.config)
+        this.setState({device: d});
+        
+    }
+
+    edit() {
+        let token  = reactLocalStorage.getObject('userInfo').token
+        
+        if (this.props.location.state === undefined) this.props.history.push('/nodes')
+        else {
+            var targetId =this.props.location.state.id;
+            console.log(this.state.device.config)
+            fetch("https://localhost:5001/api/Nodes/" + targetId , {
+                method: 'PUT',
+                headers: {
+                    Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + token,
+                },
+                body:  JSON.stringify(this.state.device)
+            })
+                .then(res => {
+                    return res.json()
+                    // console.log(res.تسخد)
+                    // if(res.status == 204){
+                    //     MySwal.fire({
+                    //         onOpen: () => {
+                        
+                    //         MySwal.clickConfirm()
+                    //         }
+                    //     }).then(() => {
+                    //         return MySwal.fire(<p>Device successfully updated.</p>)
+                    //     })
+                    // }else {
+                    //     MySwal.fire({
+                    //         onOpen: () => {
+                        
+                    //         MySwal.clickConfirm()
+                    //         }
+                    //     }).then(() => {
+                    //         return MySwal.fire(<p>Sorry, Something wrong happened.</p>)
+                    //     })
+                    // }
+                }).then ((r)=>{
+                    console.log(r)
+                })
+        }    
+        }
+
     render() {
         return (
             <div className="main-content">
@@ -35,6 +141,7 @@ class editDevice extends Component {
                                 title={<legend>Device Information</legend>}
 
                                 content={
+                                    <form onSubmit={this.handleSubmit}>
                                     <Form horizontal>
                                         <fieldset>
                                             <FormGroup>
@@ -45,7 +152,8 @@ class editDevice extends Component {
                                                     <FormControl
                                                         type="text"
                                                         placeholder="Name"
-
+                                                        onChange={this.handleName}
+                                                        value={this.state.device.name}
                                                     />
                                                 </Col>
                                             </FormGroup>
@@ -60,6 +168,9 @@ class editDevice extends Component {
                                                     <FormControl
                                                         placeholder="Description"
                                                         type="text"
+                                                        value={this.state.device.description}
+                                                        onChange={this.handleDescription}
+
                                                     />
                                                 </Col>
                                             </FormGroup>
@@ -71,9 +182,10 @@ class editDevice extends Component {
                                                 </ControlLabel>
                                                 <Col sm={10}>
                                                     <FormControl
+                                                        value={this.state.device.type}
                                                         defaultValue="WiFi"
                                                         type="text"
-                                                        disabled = "true"
+                                                        disabled="true"
                                                     />
                                                 </Col>
                                             </FormGroup>
@@ -81,196 +193,43 @@ class editDevice extends Component {
 
                                         <fieldset>
                                             <legend>Device configuration</legend>
-                                            <FormGroup>
-                                                <ControlLabel className="col-sm-2">
-                                                    Mode
-                                                </ControlLabel>
+                                            
 
-                                                <Col sm={10}>
-                                                    <Radio
-                                                        number="14"
-                                                        option="2"
-                                                        name="radioVariant"
-                                                        onChange={this.handleRadio}
-                                                        checked={this.state.radioVariant === "2"}
-                                                        label="ST"
-                                                    />
-                                                    <Radio
-                                                        number="15"
-                                                        option="1"
-                                                        name="radioVariant"
-                                                        onChange={this.handleRadio}
-                                                        checked={this.state.radioVariant === "1"}
-                                                        label="AP"
-                                                    />
-                                                    <Radio
-                                                        number="16"
-                                                        option="3"
-                                                        name="radioVariant"
-                                                        onChange={this.handleRadio}
-                                                        checked={this.state.radioVariant === "3"}
-                                                        label="Both Power"
-                                                    />
-                                                    <fieldset>
-                                                        <legend>ST</legend>
-                                                        <FormGroup>
-                                                           
-
-                                                            <Col sm={12}>
-                                                                <FormGroup>
-                                                                    <ControlLabel className="col-sm-2">
-                                                                        SSID
-                                                                    </ControlLabel>
-                                                                    <Col sm={10}>
-                                                                        <FormControl
-                                                                            type="text"
-                                                                        />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                                <FormGroup>
-                                                                    <ControlLabel className="col-sm-2">
-                                                                        Password
-                                                                    </ControlLabel>
-                                                                    <Col sm={10}>
-                                                                        <FormControl
-                                                                            type="password"
-                                                                        />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </FormGroup>
-                                                    </fieldset>
-
-                                                    <fieldset>
-                                                        <legend>AP</legend>
-                                                        <FormGroup>
-                                                           
-
-                                                            <Col sm={12}>
-                                                                <FormGroup>
-                                                                    <ControlLabel className="col-sm-2">
-                                                                        SSID
-                                                                    </ControlLabel>
-                                                                    <Col sm={10}>
-                                                                        <FormControl
-                                                                            type="text"
-                                                                        />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                                <FormGroup>
-                                                                    <ControlLabel className="col-sm-2">
-                                                                        Password
-                                                                    </ControlLabel>
-                                                                    <Col sm={10}>
-                                                                        <FormControl
-                                                                            type="password"
-                                                                        />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                                <FormGroup>
-                                                                    <ControlLabel className="col-sm-2">
-                                                                        Channel
-                                                                    </ControlLabel>
-                                                                    <Col sm={10}>
-                                                                        <FormControl
-                                                                            type="text"
-                                                                        />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                                <FormGroup>
-                                                                    <ControlLabel className="col-sm-2">
-                                                                        Bandwidth
-                                                                    </ControlLabel>
-                                                                    <Col sm={10}>
-                                                                        <FormControl
-                                                                            type="text"
-                                                                        />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </FormGroup>
-                                                    </fieldset>
+                                            <FormGroup controlId="config">
+                                                
+                                                <Col sm={12}>
+                            
+                                            <textarea inputRef={(ref) => {
+                                                            this.state.config = ref
+                                                        }} value={this.state.device.config} onChange={this.handleConfig} />
 
                                                     
                                                 </Col>
                                             </FormGroup>
-
-                                        </fieldset>
-                                        <Col ftTextCentermd={2} mdOffset={5}>
-
-                                        <Button
-                                            bsStyle="info"
-                                            ftTextCenter
-                                            fill
-                                            wd
-                                            type="submit"
-                                        >
-                                            Update Configuration
-                                        </Button>
-
-                                        </Col>
-                                    </Form>
-                                }
-                            />
-                        </Col>
-
-                        <Col md={12}>
-                            <Card
-                                title={<legend>Device Log</legend>}
-
-                                content={
-                                    <Form horizontal>
-                                        <fieldset>
-                                            <Col md={6}>
-                                                <FormGroup>
-                                                    <ControlLabel className="col-sm-2">
-                                                        From
-                                                    </ControlLabel>
-                                                    <Col sm={10}>
-                                                        <FormControl
-                                                            type="date"
-                                                            placeholder="From"
-
-                                                        />
-                                                    </Col>
-                                                </FormGroup>
-                                            </Col>
                                             
-                                            <Col md={6}>
-
-                                            <FormGroup>
-                                                <ControlLabel className="col-sm-2">
-                                                    To
-                                                </ControlLabel>
-                                                <Col sm={10}>
-                                                    <FormControl
-                                                        placeholder="To"
-                                                        type="date"
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                            </Col>
-
                                         </fieldset>
-
-                                        
                                         <Col ftTextCentermd={2} mdOffset={5}>
 
-                                        <Button
-                                            bsStyle="info"
-                                            ftTextCenter
-                                            fill
-                                            wd
-                                            type="submit"
-                                        >
-                                            Show Log
+                                            <Button
+                                                bsStyle="info"
+                                                ftTextCenter
+                                                fill
+                                                wd
+                                                onClick ={this.edit}
+                                                type="submit"
+                                            >
+                                                Update Configuration
                                         </Button>
+                                        {/* <input type="submit" value="Submit" /> */}
 
                                         </Col>
                                     </Form>
+                                    </form>
                                 }
                             />
                         </Col>
+
+                
 
                     </Row>
                 </Grid>

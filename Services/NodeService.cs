@@ -107,6 +107,8 @@ namespace IOTGW_Admin_Panel.Services
                 }
                 node.Name = nodeParam.Name;
             }
+            if (!string.IsNullOrWhiteSpace(nodeParam.Config))
+                node.Config = nodeParam.Config;
 
             // Change gateway
             if (nodeParam.GatewayId != node.GatewayId)

@@ -13,7 +13,6 @@ namespace IOTGW_Admin_Panel.Services
         Message GetById(int id);
         Message Create(Message message);
         void Delete(int id);
-
         Message ClaimCheck(int id);
     }
 
@@ -35,7 +34,7 @@ namespace IOTGW_Admin_Panel.Services
         }
         public Message GetById(int id)
         {
-            //            var message = _context.Messages.Find(id);
+            // var message = _context.Messages.Find(id);
             var message = _context.Messages.AsNoTracking().FirstOrDefault(m => m.Id == id);
 
             if (message == null)
@@ -53,7 +52,6 @@ namespace IOTGW_Admin_Panel.Services
 
         public void Delete(int id)
         {
-            //var message = _context.Messages.AsNoTracking().FirstOrDefault(m => m.Id == id);
             var message = _context.Messages.Find(id);
 
             if (message == null)

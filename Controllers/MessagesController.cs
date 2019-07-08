@@ -92,9 +92,10 @@ namespace IOTGW_Admin_Panel.Controllers
             try
             {
                 // Fobid Check
-                // var message = _messageService.NodeClaimCheck(messageParam.NodeId);
-                // if (message.Node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
-                //     return Forbid();
+                var node = _context.Nodes.Include(n => n.Gateway).FirstOrDefault(n => n.Id == messageParam.NodeId);
+                if (node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                    return Forbid();
+
                 _messageService.Create(messageMap);
                 return CreatedAtAction(nameof(GetById), new { id = messageMap.Id }, messageMap);
                 //return Ok();

@@ -46,6 +46,7 @@ class LoginPage extends Component {
             if (responseData.token != null) {
                 let tempd =  responseData;
                 reactLocalStorage.setObject('userInfo',tempd)
+                console.log(reactLocalStorage.getObject('userInfo'))
                 this.props.history.push('/')
             } else {
                 MySwal.fire({

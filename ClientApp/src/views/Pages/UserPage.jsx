@@ -117,7 +117,7 @@ class UserPage extends Component {
 
     edit() {
         let token  = reactLocalStorage.getObject('userInfo').token
-        let id = reactLocalStorage.getObject('userInfo').id;
+        let id = 1;
         console.log(id)
         fetch("https://localhost:5001/api/Users/" + id , {
             method: 'PUT',

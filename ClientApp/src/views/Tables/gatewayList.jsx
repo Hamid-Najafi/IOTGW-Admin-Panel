@@ -12,6 +12,11 @@ import {
 import { Link } from 'react-router-dom';
 import { reactLocalStorage } from 'reactjs-localstorage';
 
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
+
+
 class gatewayList extends Component {
 
     constructor(props) {
@@ -35,22 +40,70 @@ class gatewayList extends Component {
             // body: JSON.stringify(temp)
         })
             .then(res => {
-                if (res.status > 399 && res.status < 500) {
+                if (res.status > 399 && res.status < 500 && res.status!=404) {
+                    console.log(res)
+                    // return res.json()
                     this.props.history.push('/login')
                 }else return res.json()
             })
             .then(
                 (result) => {
+                    console.log('ssss')
                     this.setState({
                         gateways: result
                     });
-                    console.log(result)
 
                 },
             )
     }
+    remove(e){
+        let token = reactLocalStorage.getObject('userInfo').token
 
+        console.log(e.target.attributes['id'].value)
+        fetch("https://localhost:5001/api/Gateways/"+ e.target.attributes['id'].value, {
+            method: 'DELETE',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
+            },
+        })
+            .then(res => {
+                console.log(res)
+                if (res.status > 399 && res.status < 500) {
+                    this.props.history.push('/login')
+                }else if(res.status ==204 ) {
+                    MySwal.fire({
+    
+                        onOpen: () => {
+    
+                          MySwal.clickConfirm()
+                        }
+                      }).then(() => {
+                        
+                        return MySwal.fire(<p>Gateway successfully removed.</p>)
+                        
+                      })
+    
+                }
+                else {
+                    MySwal.fire({
+    
+                        onOpen: () => {
+    
+                          MySwal.clickConfirm()
+                        }
+                      }).then(() => {
+                        return MySwal.fire(<p>Sorry. Something wrong happened</p>)
+                      })
+    
+                }
+            })
+            
+
+    }
     renderTableData() {
+        if(this.state.gateways!= 'No Gateway'){
         return this.state.gateways.map((gw, index) => {
             const { id, name, description } = gw //destructuring
             return (
@@ -69,9 +122,16 @@ class gatewayList extends Component {
                         </Link>
                         
                     </td>
+                    <td className="text-left">
+                    
+                            <a id={id} onClick={this.remove} className="btn btn-simple btn-warning btn-icon edit">remove</a>
+                        
+                        
+                    </td>
                 </tr>
             )
         })
+    }
     }
 
 
@@ -88,7 +148,7 @@ class gatewayList extends Component {
                                     <Table striped hover responsive>
                                         <thead>
                                             <tr>
-                                                <th>#</th>
+                                                <th>ID</th>
 
                                                 {
                                                     gateway_thArray.map((prop, key) => {
@@ -100,11 +160,12 @@ class gatewayList extends Component {
                                                 <th>Show Nodes</th>
 
                                                 <th>Edit</th>
+                                                <th>Remove</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {this.renderTableData()}
-
                                         </tbody>
                                     </Table>
                                 }

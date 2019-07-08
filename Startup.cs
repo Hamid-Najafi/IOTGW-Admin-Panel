@@ -35,7 +35,7 @@ namespace IOTGW_Admin_Panel
             services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContext<DataBaseContext>(options =>
-            //      options.UseSqlite(Configuration.GetConnectionString("DataBaseContext")));
+            //options.UseSqlite(Configuration.GetConnectionString("DataBaseContext")));
             options.UseInMemoryDatabase("ApplicationDbContext"));
 
             // In production, the React files will be served from this directory

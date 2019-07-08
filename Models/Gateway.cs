@@ -15,7 +15,6 @@ namespace IOTGW_Admin_Panel.Models
         [StringLength(30)]
         public string Name { get; set; }
 
-        [Required]
         [StringLength(120)]
         public string Description { get; set; }
 

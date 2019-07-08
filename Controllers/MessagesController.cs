@@ -104,7 +104,6 @@ namespace IOTGW_Admin_Panel.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            return null;
         }
 
         /// <summary>

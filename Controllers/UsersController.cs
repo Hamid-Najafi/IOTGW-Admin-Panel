@@ -119,6 +119,52 @@ namespace IOTGW_Admin_Panel.Controllers
         }
 
         /// <summary>
+        /// gets Nodes list for a user.
+        /// </summary>
+        [HttpGet]
+        [Route("{userId:int}/nodes")]
+        [Produces("application/json")]
+        public ActionResult<IEnumerable<Node>> GetNodesForUser(int userId)
+        {
+            var currentUserId = int.Parse(User.Identity.Name);
+            if (userId != currentUserId && !User.IsInRole(Role.Admin))
+                return Forbid();
+            try
+            {
+                var nodes = _userService.GetNodesForUser(userId);
+                var nodesDtoMap = _mapper.Map<IList<NodeDto>>(nodes);
+                return Ok(nodesDtoMap);
+            }
+            catch (AppException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+        /// <summary>
+        /// gets messages list for a user.
+        /// </summary>
+        [HttpGet]
+        [Route("{userId:int}/messages")]
+        [Produces("application/json")]
+        public ActionResult<IEnumerable<Node>> GetMessagesForUser(int userId)
+        {
+            var currentUserId = int.Parse(User.Identity.Name);
+            if (userId != currentUserId && !User.IsInRole(Role.Admin))
+                return Forbid();
+            try
+            {
+                var messages = _userService.GetMessagesForUser(userId);
+                var messagesDtoMap = _mapper.Map<IList<MessageDto>>(messages);
+                return Ok(messagesDtoMap);
+            }
+            catch (AppException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+        /// <summary>
         /// Ctreate new User.
         /// </summary>
         /// <param user="User Item"></param> 

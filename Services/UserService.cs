@@ -20,7 +20,8 @@ namespace IOTGW_Admin_Panel.Services
         IEnumerable<User> GetAll();
         User GetById(int id);
         IEnumerable<GatewayDto> GetGatewaysForUser(int id);
-
+        IEnumerable<NodeDto> GetNodesForUser(int id);
+        IEnumerable<MessageDto> GetMessagesForUser(int id);
         User Create(User user, string password);
         void Update(User user, string password = null);
         void Delete(int id);
@@ -37,7 +38,6 @@ namespace IOTGW_Admin_Panel.Services
             _appSettings = appSettings.Value;
             _context = context;
         }
-        // Typed lambda expression for Select() method. 
         private static readonly Expression<Func<Gateway, GatewayDto>> AsGatewayDto =
             x => new GatewayDto
             {
@@ -47,7 +47,27 @@ namespace IOTGW_Admin_Panel.Services
                 UserName = x.User.Username,
                 Description = x.Description,
             };
-
+        private static readonly Expression<Func<Node, NodeDto>> AsNodeDto =
+            x => new NodeDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                GatewayId = x.GatewayId,
+                GatewayName = x.Gateway.Name,
+                Config = x.Config,
+                Description = x.Description,
+                Type = x.Type
+            };
+        private static readonly Expression<Func<Message, MessageDto>> AsMessageDto =
+            x => new MessageDto
+            {
+                Id = x.Id,
+                Title = x.Title,
+                NodeName = x.Node.Name,
+                SourceNode = x.SourceNode,
+                RecievedDateTime = x.RecievedDateTime,
+                Data = x.Data
+            };
         public User Authenticate(string username, string password)
         {
             if (string.IsNullOrEmpty(username))
@@ -136,12 +156,40 @@ namespace IOTGW_Admin_Panel.Services
         {
             var gateways = _context.Gateways.Include(n => n.User)
             .Where(n => n.UserId == id)
-            .Select(AsGatewayDto).ToList();
+            .Select(AsGatewayDto)
+            .ToList();
 
             if (gateways == null)
-                throw new AppException("Node doesnt have any messages");
+                throw new AppException("User doesnt have any gateway");
 
             return gateways;
+
+        }
+        public IEnumerable<NodeDto> GetNodesForUser(int id)
+        {
+            var nodes = _context.Nodes.Include(n => n.Gateway)
+            .Where(g => g.Gateway.UserId == id)
+            .Select(AsNodeDto)
+            .ToList();
+
+            if (nodes == null)
+                throw new AppException("User doesnt have any node");
+
+            return nodes;
+
+        }
+        public IEnumerable<MessageDto> GetMessagesForUser(int id)
+        {
+            var messages = _context.Messages.Include(n => n.Node).ThenInclude(m => m.Gateway)
+            .Where(g => g.Node.Gateway.UserId == id)
+            .Select(AsMessageDto)
+            .ToList();
+
+
+            if (messages == null)
+                throw new AppException("User doesnt have any messages");
+
+            return messages;
 
         }
         public User Create(User user, string password)
@@ -287,5 +335,6 @@ namespace IOTGW_Admin_Panel.Services
 
             return true;
         }
+
     }
 }

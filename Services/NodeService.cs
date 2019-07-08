@@ -85,32 +85,36 @@ namespace IOTGW_Admin_Panel.Services
             return node;
         }
 
-        public void Update(Node gatewayParam)
+        public void Update(Node nodeParam)
         {
+            if (nodeParam.Gateway == null)
+            {
+                throw new AppException("Node Params are null");
+            }
             //get currect node in db
-            var node = _context.Nodes.Find(gatewayParam.Id);
+            var node = _context.Nodes.Find(nodeParam.Id);
 
             if (node == null)
                 throw new AppException("Node not found");
 
-            if (gatewayParam.Name != null)
+            if (nodeParam.Name != null)
             {
-                if (gatewayParam.Name != node.Name)
+                if (nodeParam.Name != node.Name)
                 {
-                    // gatewayname has changed so check if the new gatewayname is already taken
-                    if (_context.Nodes.Any(x => x.Name == gatewayParam.Name))
-                        throw new AppException("gatewayname " + gatewayParam.Name + " is already taken");
+                    // node name has changed so check if the new one is already taken
+                    if (_context.Nodes.Any(x => x.Name == nodeParam.Name))
+                        throw new AppException("Node Name '" + nodeParam.Name + "' is already taken");
                 }
-                node.Name = gatewayParam.Name;
+                node.Name = nodeParam.Name;
             }
 
             // Change gateway
-            if (gatewayParam.GatewayId != node.GatewayId)
-                node.GatewayId = gatewayParam.GatewayId;
+            if (nodeParam.GatewayId != node.GatewayId)
+                node.GatewayId = nodeParam.GatewayId;
 
             // update node properties / cant chane Role
-            if (!string.IsNullOrWhiteSpace(gatewayParam.Description))
-                node.Description = gatewayParam.Description;
+            if (!string.IsNullOrWhiteSpace(nodeParam.Description))
+                node.Description = nodeParam.Description;
 
             _context.Nodes.Update(node);
             _context.SaveChanges();

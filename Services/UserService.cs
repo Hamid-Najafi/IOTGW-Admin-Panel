@@ -176,11 +176,16 @@ namespace IOTGW_Admin_Panel.Services
         }
         public void Update(User userParam, string password = null)
         {
+
             var user = _context.Users.Find(userParam.Id);
 
             if (user == null)
                 throw new AppException("User not found");
 
+            if (userParam.Username == null)
+            {
+                throw new AppException("Username is null");
+            }
             if (userParam.Username != null)
             {
                 if (userParam.Username != user.Username)

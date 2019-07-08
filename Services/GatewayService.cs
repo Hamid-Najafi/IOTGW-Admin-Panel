@@ -86,6 +86,10 @@ namespace IOTGW_Admin_Panel.Services
 
         public void Update(Gateway gatewayParam)
         {
+            if (gatewayParam.User == null)
+            {
+                throw new AppException("Gateway Params are null");
+            }
             //get currect gateway in db
             var gateway = _context.Gateways.Find(gatewayParam.Id);
 

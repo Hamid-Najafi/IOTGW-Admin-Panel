@@ -35,18 +35,7 @@ namespace IOTGW_Admin_Panel.Services
             //return _context.Gateways.Include(x => x.User).ToList();
             return _context.Gateways.ToList();
         }
-        // Typed lambda expression for Select() method. 
-        private static readonly Expression<Func<Node, NodeDto>> AsNodeDto =
-            x => new NodeDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                GatewayId = x.GatewayId,
-                GatewayName = x.Gateway.Name,
-                Config = x.Config,
-                Description = x.Description,
-                Type = x.Type
-            };
+
         public Gateway GetById(int id)
         {
             var gateway = _context.Gateways.Find(id);
@@ -60,7 +49,7 @@ namespace IOTGW_Admin_Panel.Services
         {
             var nodes = _context.Nodes.Include(n => n.Gateway)
             .Where(n => n.GatewayId == id)
-            .Select(AsNodeDto).ToList();
+            .Select(Dto.AsNodeDto).ToList();
 
             if (nodes == null)
                 throw new AppException("Gateway doesnt have any node");

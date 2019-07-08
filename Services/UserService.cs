@@ -38,36 +38,7 @@ namespace IOTGW_Admin_Panel.Services
             _appSettings = appSettings.Value;
             _context = context;
         }
-        private static readonly Expression<Func<Gateway, GatewayDto>> AsGatewayDto =
-            x => new GatewayDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                UserId = x.UserId,
-                UserName = x.User.Username,
-                Description = x.Description,
-            };
-        private static readonly Expression<Func<Node, NodeDto>> AsNodeDto =
-            x => new NodeDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                GatewayId = x.GatewayId,
-                GatewayName = x.Gateway.Name,
-                Config = x.Config,
-                Description = x.Description,
-                Type = x.Type
-            };
-        private static readonly Expression<Func<Message, MessageDto>> AsMessageDto =
-            x => new MessageDto
-            {
-                Id = x.Id,
-                Title = x.Title,
-                NodeName = x.Node.Name,
-                SourceNode = x.SourceNode,
-                RecievedDateTime = x.RecievedDateTime,
-                Data = x.Data
-            };
+
         public User Authenticate(string username, string password)
         {
             if (string.IsNullOrEmpty(username))
@@ -156,7 +127,7 @@ namespace IOTGW_Admin_Panel.Services
         {
             var gateways = _context.Gateways.Include(n => n.User)
             .Where(n => n.UserId == id)
-            .Select(AsGatewayDto)
+            .Select(Dto.AsGatewayDto)
             .ToList();
 
             if (gateways == null)
@@ -169,7 +140,7 @@ namespace IOTGW_Admin_Panel.Services
         {
             var nodes = _context.Nodes.Include(n => n.Gateway)
             .Where(g => g.Gateway.UserId == id)
-            .Select(AsNodeDto)
+            .Select(Dto.AsNodeDto)
             .ToList();
 
             if (nodes == null)
@@ -182,7 +153,7 @@ namespace IOTGW_Admin_Panel.Services
         {
             var messages = _context.Messages.Include(n => n.Node).ThenInclude(m => m.Gateway)
             .Where(g => g.Node.Gateway.UserId == id)
-            .Select(AsMessageDto)
+            .Select(Dto.AsMessageDto)
             .ToList();
 
 

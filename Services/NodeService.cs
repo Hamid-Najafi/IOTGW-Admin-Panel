@@ -87,10 +87,10 @@ namespace IOTGW_Admin_Panel.Services
 
         public void Update(Node nodeParam)
         {
-            if (nodeParam.Gateway == null)
-            {
-                throw new AppException("Node Params are null");
-            }
+            // if (nodeParam.Gateway == null)
+            // {
+            //     throw new AppException("Node Params are null");
+            // }
             //get currect node in db
             var node = _context.Nodes.AsNoTracking().FirstOrDefault(n => n.Id == nodeParam.Id);
 

@@ -112,13 +112,21 @@ namespace IOTGW_Admin_Panel.Models
                 new Message
                 {
                     NodeId = 1,
+                    Title = "Message 1",
                     SourceNode = "Client in Lab",
                     Data = "What hath God wrought"
                 }, new Message
                 {
                     NodeId = 2,
+                    Title = "Message 2",
                     SourceNode = "Client in Home",
-                    Data = "Mr. Watson, come here. I want to see you"
+                    Data = "Mr. Watson, come here."
+                }, new Message
+                {
+                    NodeId = 3,
+                    Title = "Message 3",
+                    SourceNode = "Client in Somewhere",
+                    Data = "I want to see you"
                 }
                 );
 

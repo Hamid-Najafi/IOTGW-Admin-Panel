@@ -13,6 +13,8 @@ namespace IOTGW_Admin_Panel.Services
         Message GetById(int id);
         Message Create(Message message);
         void Delete(int id);
+
+        Message ClaimCheck(int id);
     }
 
     public class MessageService : IMessageService
@@ -33,7 +35,8 @@ namespace IOTGW_Admin_Panel.Services
         }
         public Message GetById(int id)
         {
-            var message = _context.Messages.Find(id);
+            //            var message = _context.Messages.Find(id);
+            var message = _context.Messages.AsNoTracking().FirstOrDefault(m => m.Id == id);
 
             if (message == null)
                 throw new AppException("Message not found");
@@ -50,6 +53,7 @@ namespace IOTGW_Admin_Panel.Services
 
         public void Delete(int id)
         {
+            //var message = _context.Messages.AsNoTracking().FirstOrDefault(m => m.Id == id);
             var message = _context.Messages.Find(id);
 
             if (message == null)
@@ -62,5 +66,12 @@ namespace IOTGW_Admin_Panel.Services
             }
         }
 
+        public Message ClaimCheck(int id)
+        {
+            var message = _context.Messages.Include(m => m.Node).ThenInclude(n => n.Gateway).FirstOrDefault(m => m.Id == id);
+            if (message == null)
+                throw new AppException("Message not found");
+            return message;
+        }
     }
 }

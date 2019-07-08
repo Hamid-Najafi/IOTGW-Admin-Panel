@@ -64,8 +64,36 @@ namespace IOTGW_Admin_Panel.Controllers
                 // if (node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
                 //     return Forbid();
 
-                var nodeMap = _mapper.Map<Node>(node);
+                var node2 = _nodeService.GetById(id);
+                var nodeMap = _mapper.Map<Node>(node2);
                 return Ok(nodeMap);
+            }
+            catch (AppException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// gets messages list for a node.
+        /// </summary>
+        [HttpGet]
+        [Route("{nodeId:int}/messages")]
+        [Produces("application/json")]
+        public ActionResult<IEnumerable<NodeDto>> GetMessagesForNode(int nodeId)
+        {
+            var currentUserId = int.Parse(User.Identity.Name);
+
+            try
+            {
+                var node = _nodeService.ClaimCheck(nodeId);
+                if (node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                    return Forbid();
+
+                var messages = _nodeService.GetMessagesForNode(nodeId);
+                var messagesDtoMap = _mapper.Map<IList<MessageDto>>(messages);
+                return Ok(messagesDtoMap);
             }
             catch (AppException ex)
             {
@@ -105,6 +133,7 @@ namespace IOTGW_Admin_Panel.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, Node nodeParam)
         {
+
             //only allow admins to access other node records
             var currentUserId = int.Parse(User.Identity.Name);
 
@@ -116,7 +145,10 @@ namespace IOTGW_Admin_Panel.Controllers
 
             try
             {
-                // save 
+                var node = _nodeService.ClaimCheck(id);
+                if (node.Gateway.UserId != currentUserId && !User.IsInRole(Role.Admin))
+                    return Forbid();
+
                 _nodeService.Update(nodeMap);
                 return NoContent();
                 //return Ok();
@@ -136,8 +168,12 @@ namespace IOTGW_Admin_Panel.Controllers
         [Authorize(Roles = Role.Admin)]
         public IActionResult Delete(int id)
         {
+            var currentUserId = int.Parse(User.Identity.Name);
+
             try
             {
+                var node = _nodeService.GetById(id);
+
                 _nodeService.Delete(id);
                 return NoContent();
                 //return Ok();

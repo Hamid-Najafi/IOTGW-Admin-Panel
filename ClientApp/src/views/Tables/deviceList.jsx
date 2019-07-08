@@ -171,7 +171,7 @@ class deviceList extends Component {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {this.renderTableData()}
+                                            {/* {this.renderTableData()} */}
 
                                         </tbody>
                                     </Table>

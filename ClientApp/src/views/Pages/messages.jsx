@@ -14,12 +14,12 @@ class messages extends Component {
             messages: []
         };
     }
-    
+
     componentDidMount() {
         let token = reactLocalStorage.getObject('userInfo').token
 
 
-        fetch("https://localhost:5001/api/Messages" , {
+        fetch("https://localhost:5001/api/Messages", {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -28,9 +28,8 @@ class messages extends Component {
             },
             // body: JSON.stringify(temp)
         })
-        .then(res => 
-            {
-                if(res.status>399 && res.status<500) {
+            .then(res => {
+                if (res.status > 399 && res.status < 500) {
                     this.props.history.push('/login')
                 }
                 return res.json()
@@ -46,15 +45,15 @@ class messages extends Component {
             )
 
     }
-    
+
     printMessages() {
-      
+
         return (
-          <div>
-            {this.state.messages.map(m => <li>{JSON.stringify(m)} <br></br></li>)}
-          </div>
+            <div>
+                {this.state.messages.map(m => <li>{JSON.stringify(m)} <br></br></li>)}
+            </div>
         );
-      }
+    }
     render() {
         return (
             <div className="main-content">
@@ -66,9 +65,9 @@ class messages extends Component {
                                 content={
                                     <Col>
                                         {
-                                           this.printMessages()
+                                            this.printMessages()
                                         }
-                                        
+
 
                                     </Col>
                                 }

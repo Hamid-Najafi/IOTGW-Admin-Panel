@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using IOTGW_Admin_Panel.Helpers;
 using IOTGW_Admin_Panel.Models;
+using System.Linq.Expressions;
 
 namespace IOTGW_Admin_Panel.Services
 {
@@ -18,6 +19,8 @@ namespace IOTGW_Admin_Panel.Services
         User Authenticate(string username, string password);
         IEnumerable<User> GetAll();
         User GetById(int id);
+        IEnumerable<GatewayDto> GetGatewaysForUser(int id);
+
         User Create(User user, string password);
         void Update(User user, string password = null);
         void Delete(int id);
@@ -34,6 +37,16 @@ namespace IOTGW_Admin_Panel.Services
             _appSettings = appSettings.Value;
             _context = context;
         }
+        // Typed lambda expression for Select() method. 
+        private static readonly Expression<Func<Gateway, GatewayDto>> AsGatewayDto =
+            x => new GatewayDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                UserId = x.UserId,
+                UserName = x.User.Username,
+                Description = x.Description,
+            };
 
         public User Authenticate(string username, string password)
         {
@@ -119,6 +132,18 @@ namespace IOTGW_Admin_Panel.Services
 
             return user;
         }
+        public IEnumerable<GatewayDto> GetGatewaysForUser(int id)
+        {
+            var gateways = _context.Gateways.Include(n => n.User)
+            .Where(n => n.UserId == id)
+            .Select(AsGatewayDto).ToList();
+
+            if (gateways == null)
+                throw new AppException("Node doesnt have any messages");
+
+            return gateways;
+
+        }
         public User Create(User user, string password)
         {
             // validation
@@ -151,11 +176,16 @@ namespace IOTGW_Admin_Panel.Services
         }
         public void Update(User userParam, string password = null)
         {
+
             var user = _context.Users.Find(userParam.Id);
 
             if (user == null)
                 throw new AppException("User not found");
 
+            if (userParam.Username == null)
+            {
+                throw new AppException("Username is null");
+            }
             if (userParam.Username != null)
             {
                 if (userParam.Username != user.Username)
